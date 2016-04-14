@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Course {
 	private String courseName;
 	private ArrayList<Student> enrroled = new ArrayList<Student>();
+	private int year;
 
 	public Course(String courseName) {
 		this.courseName = courseName;

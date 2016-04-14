@@ -10,6 +10,7 @@ public class College {
 	private HashMap<String, Course> courses = new HashMap<String, Course>();
 	private DateRange normalSeason;
 	private DateRange appealSeason;
+	private ArrayList<Exam> exams;
 	
 	
 	public HashMap<String, Course> getCourses() {
