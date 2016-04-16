@@ -1,24 +1,18 @@
 package info;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class College {
 	public enum Season {
 		Normal, Appeal
 	}
 
-	private HashMap<String, Course> courses = new HashMap<String, Course>();
+	///private HashMap<String, Course> courses = new HashMap<String, Course>();
 	private DateRange normalSeason;
 	private DateRange appealSeason;
 	private ArrayList<Exam> exams;
 	
-	
-	public HashMap<String, Course> getCourses() {
-		return courses;
-	}
-	public void setCourses(HashMap<String, Course> courses) {
-		this.courses = courses;
-	}
+	 
 	public DateRange getNormalSeason() {
 		return normalSeason;
 	}
@@ -30,6 +24,12 @@ public class College {
 	}
 	public void setAppealSeason(DateRange appealSeason) {
 		this.appealSeason = appealSeason;
+	}
+	public ArrayList<Exam> getExams() {
+		return exams;
+	}
+	public void setExams(ArrayList<Exam> exams) {
+		this.exams = exams;
 	}
 	
 	

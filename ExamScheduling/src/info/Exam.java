@@ -10,6 +10,7 @@ public class Exam {
 	private Date examDate;
 	private ArrayList<Student> signedUp = new ArrayList<Student>();
 	private Season examSeason;
+	private int year;
 	
 	public String getCourseName() {
 		return courseName;
@@ -34,6 +35,12 @@ public class Exam {
 	}
 	public void setExamSeason(Season examSeason) {
 		this.examSeason = examSeason;
+	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 	
