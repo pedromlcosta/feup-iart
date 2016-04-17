@@ -8,7 +8,7 @@ public class ChromosomeB {
 	private ArrayList<Exam> examsReference;
 	private ArrayList<Integer> genes;
 
-	public ChromosomeB(MegaCromosome examsReference, ArrayList<Integer> genes) {
+	public ChromosomeB(GeneticAlgorithm examsReference, ArrayList<Integer> genes) {
 		this.examsReference = examsReference.getExams();
 		this.genes = genes;
 	}

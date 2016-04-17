@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import info.Exam;
 
-public class MegaCromosome {
-	private ArrayList<Exam> exams;
+public class GeneticAlgorithm {
+	
 	private ArrayList<ChromosomeB> chromosomes;
-	private ArrayList<ArrayList<Integer>> commonExam;
+	
 
 	public ArrayList<Exam> getExams() {
 		return exams;
