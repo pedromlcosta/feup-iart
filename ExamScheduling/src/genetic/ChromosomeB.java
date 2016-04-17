@@ -2,23 +2,20 @@ package genetic;
 
 import java.util.ArrayList;
 
+import main.Main;
 import info.Exam;
 
 public class ChromosomeB {
-	private ArrayList<Exam> examsReference;
+	private ArrayList<Exam> examsReference = Main.getExams();
 	private ArrayList<Integer> genes;
 
-	public ChromosomeB(GeneticAlgorithm examsReference, ArrayList<Integer> genes) {
-		this.examsReference = examsReference.getExams();
+	public ChromosomeB(){
+		
+	}
+	
+	public ChromosomeB( ArrayList<Integer> genes) {
+		//put genes being generated randomly?
 		this.genes = genes;
-	}
-
-	public ArrayList<Exam> getExamsReference() {
-		return examsReference;
-	}
-
-	public void setExamsReference(ArrayList<Exam> examsReference) {
-		this.examsReference = examsReference;
 	}
 
 	public ArrayList<Integer> getGenes() {

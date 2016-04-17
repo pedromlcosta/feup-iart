@@ -9,9 +9,11 @@ import annealing.SimmulatedAnnealing;
 
 public class Main {
 
-	private ArrayList<Exam> exams;
-	private ArrayList<ArrayList<Integer>> commonExam;
+	static private ArrayList<Exam> exams;
+	static private ArrayList<ArrayList<Integer>> commonExam;
 	
+	
+
 	private GeneticAlgorithm genetic = new GeneticAlgorithm();
 	private SimmulatedAnnealing annealing = new SimmulatedAnnealing();
 	
@@ -19,5 +21,21 @@ public class Main {
 		
 		
 		
+	}
+
+	public static ArrayList<Exam> getExams() {
+		return exams;
+	}
+
+	public static void setExams(ArrayList<Exam> exams) {
+		Main.exams = exams;
+	}
+	
+	public static ArrayList<ArrayList<Integer>> getCommonExam() {
+		return commonExam;
+	}
+
+	public static void setCommonExam(ArrayList<ArrayList<Integer>> commonExam) {
+		Main.commonExam = commonExam;
 	}
 }
