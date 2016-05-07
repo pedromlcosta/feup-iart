@@ -1,6 +1,7 @@
 package genetic;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import info.Exam;
 
@@ -43,7 +44,9 @@ public class ChromosomeA implements Comparable<ChromosomeA> {
 	}
 
 	// TODO
-	public void mutate() {
+	public void mutate(Random seed, double mutationProb) {
+		if (seed.nextDouble() <= mutationProb) {
+		}
 		// TODO Auto-generated method stub
 
 	}

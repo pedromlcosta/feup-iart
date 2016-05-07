@@ -43,6 +43,7 @@ public class GeneticAlgorithm {
 		// When the differene betweenGeneration is smaller than DIFF_LIMIT
 		int generationUnchanged = 0;
 
+		// assume que já recebe uma gereção inicial
 		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
 			// Might not be needed
@@ -72,10 +73,7 @@ public class GeneticAlgorithm {
 	// the chromossome part?
 	private void mutate(ArrayList<ChromosomeB> newGeneration) {
 		for (ChromosomeB chromosome : newGeneration) {
-
-			if (randomValues.nextDouble() <= mutationProb)
-				chromosome.mutate();
-
+			chromosome.mutate(randomValues, mutationProb);
 		}
 	}
 

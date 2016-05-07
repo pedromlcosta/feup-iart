@@ -1,6 +1,7 @@
 package genetic;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import main.Main;
 import info.Exam;
@@ -48,10 +49,13 @@ public class ChromosomeB implements Comparable<ChromosomeB> {
 		// TODO Auto-generated method stub
 
 	}
+
 	// TODO
-	public void mutate() {
+	public void mutate(Random seed, double mutationProb) {
+		if (seed.nextDouble() <= mutationProb) {
+		}
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -104,6 +108,5 @@ public class ChromosomeB implements Comparable<ChromosomeB> {
 	public void setProbability(double probability) {
 		this.probability = probability;
 	}
-
 
 }
