@@ -1,11 +1,10 @@
 package main;
 
-import genetic.GeneticAlgorithm;
-import info.Exam;
-
 import java.util.ArrayList;
 
-import annealing.SimmulatedAnnealing;
+import annealing.SimulatedAnnealing;
+import genetic.GeneticAlgorithm;
+import info.Exam;
 
 public class Main {
 
@@ -15,11 +14,11 @@ public class Main {
 	
 
 	private GeneticAlgorithm genetic = new GeneticAlgorithm();
-	private SimmulatedAnnealing annealing = new SimmulatedAnnealing();
+	private SimulatedAnnealing annealing = new SimulatedAnnealing();
 	
 	public static void main(String args[]) {
 		
-		
+		System.out.println("correu");
 		
 	}
 

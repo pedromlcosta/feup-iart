@@ -9,11 +9,11 @@ public class SimulatedAnnealing {
 	private Individual newSolution;
 	private Individual bestSolution;
 	
-	SimulatedAnnealing(){
+	public SimulatedAnnealing(){
 		coolingRate = 0.97;
 	}
 	
-	SimulatedAnnealing(double coolingRate){
+	public SimulatedAnnealing(double coolingRate){
 		this.coolingRate = coolingRate;
 	}
 
