@@ -5,23 +5,23 @@ import java.util.Random;
 
 import info.Exam;
 
-public class ChromosomeB implements Comparable<ChromosomeB> {
+public class Chromosome implements Comparable<Chromosome> {
 	private ArrayList<Exam> examsReference;// = Main.getExams();
 	private ArrayList<Integer> genes;
 	private int score;
 	private double probability;
 
-	public ChromosomeB() {
+	public Chromosome() {
 		examsReference = new ArrayList<Exam>();
 		genes = new ArrayList<Integer>();
 	}
 
-	public ChromosomeB(ArrayList<Exam> exams) {
+	public Chromosome(ArrayList<Exam> exams) {
 		examsReference = exams;
 		genes = new ArrayList<Integer>();
 	}
 
-	public ChromosomeB(ArrayList<Exam> exams, ArrayList<Integer> givenGenes) {
+	public Chromosome(ArrayList<Exam> exams, ArrayList<Integer> givenGenes) {
 		examsReference = new ArrayList<Exam>();
 		genes = givenGenes;
 	}
@@ -64,7 +64,7 @@ public class ChromosomeB implements Comparable<ChromosomeB> {
 	}
 
 	@Override
-	public int compareTo(ChromosomeB o) {
+	public int compareTo(Chromosome o) {
 		if (o.getScore() > this.getScore())
 			return -1;
 		else if (o.getScore() < this.getScore())
@@ -90,7 +90,7 @@ public class ChromosomeB implements Comparable<ChromosomeB> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ChromosomeB other = (ChromosomeB) obj;
+		Chromosome other = (Chromosome) obj;
 		if (examsReference == null) {
 			if (other.examsReference != null)
 				return false;
@@ -112,6 +112,17 @@ public class ChromosomeB implements Comparable<ChromosomeB> {
 
 	public void setProbability(double probability) {
 		this.probability = probability;
+	}
+
+	public Chromosome crossOver(Chromosome chromossome2, int crossOverPoints) {
+		// TODO Auto-generated method stub
+		return null;
+
+	}
+
+	public Chromosome crossOver() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
