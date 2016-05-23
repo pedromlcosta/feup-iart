@@ -3,22 +3,27 @@ package genetic;
 import java.util.ArrayList;
 import java.util.Random;
 
-import main.Main;
 import info.Exam;
 
 public class ChromosomeB implements Comparable<ChromosomeB> {
-	private ArrayList<Exam> examsReference = Main.getExams();
+	private ArrayList<Exam> examsReference;// = Main.getExams();
 	private ArrayList<Integer> genes;
 	private int score;
 	private double probability;
 
 	public ChromosomeB() {
-
+		examsReference = new ArrayList<Exam>();
+		genes = new ArrayList<Integer>();
 	}
 
-	public ChromosomeB(ArrayList<Integer> genes) {
-		// put genes being generated randomly?
-		this.genes = genes;
+	public ChromosomeB(ArrayList<Exam> exams) {
+		examsReference = exams;
+		genes = new ArrayList<Integer>();
+	}
+
+	public ChromosomeB(ArrayList<Exam> exams, ArrayList<Integer> givenGenes) {
+		examsReference = new ArrayList<Exam>();
+		genes = givenGenes;
 	}
 
 	public ArrayList<Integer> getGenes() {

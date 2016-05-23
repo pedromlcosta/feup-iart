@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GeneticAlgorithm {
-	private static final double CROSSOVER_DEFAULT_PROB = 0.65;
+	// TODO estes valores foram random
+	private static final double CROSSOVER_DEFAULT = 0.65;
 	private static final double MUTATION_DEFAULT_PROB = 0.0001;
 	private static final int MINIMUM_LVL_GOOD_SOLUTION = 152;
 	private static final int UNCHANGED_GENERATION_LIMIT = 5;
@@ -25,7 +26,7 @@ public class GeneticAlgorithm {
 		this.chromosomes = chromosomes;
 		this.elitistPicks = Math.floorDiv(chromosomes.size(), 100);
 		this.mutationProb = MUTATION_DEFAULT_PROB;
-		this.crossOverProb = CROSSOVER_DEFAULT_PROB;
+		this.crossOverProb = CROSSOVER_DEFAULT;
 	}
 
 	public GeneticAlgorithm(ArrayList<ChromosomeB> chromosomes, double mutationProb, int elitistPicks, double crossOverProb) {
@@ -38,16 +39,19 @@ public class GeneticAlgorithm {
 		this.crossOverProb = crossOverProb;
 	}
 
-	// esqueleto do algoritmo
+	// TODO esqueleto do algoritmo
 	public void skeleton() {
 		// When the differene betweenGeneration is smaller than DIFF_LIMIT
 		int generationUnchanged = 0;
 
 		// assume que já recebe uma gereção inicial
+		// TODO do while or just while, a primeira solução "random" pode ser boa
+		// o sufeciente
+		sumOfEvaluations = evaluateChromosomes(chromosomes);
 		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
 			// Might not be needed
-			evaluateChromosomes(chromosomes);
+
 			chromosomes.sort(null);
 
 			ArrayList<ChromosomeB> newGeneration = new ArrayList<ChromosomeB>();
@@ -79,12 +83,6 @@ public class GeneticAlgorithm {
 
 	private void crossOver(ArrayList<ChromosomeB> currentGeneration, ArrayList<ChromosomeB> newGeneration) {
 
-	}
-
-	// TODO
-	@SuppressWarnings("unused")
-	private int getRandomChromossomePos() {
-		return 0;
 	}
 
 	private void elitistChoice(ArrayList<ChromosomeB> newGeneration) {
@@ -166,7 +164,7 @@ public class GeneticAlgorithm {
 	}
 
 	public static double getCrossoverDefaultProb() {
-		return CROSSOVER_DEFAULT_PROB;
+		return CROSSOVER_DEFAULT;
 	}
 
 	public static double getMutationDefaultProb() {
