@@ -40,7 +40,7 @@ public class GeneticAlgorithm {
 	}
 
 	// TODO esqueleto do algoritmo
-	public void skeleton() {
+	public void skeleton() throws Exception {
 		// When the differene betweenGeneration is smaller than DIFF_LIMIT
 		int generationUnchanged = 0;
 
@@ -79,7 +79,7 @@ public class GeneticAlgorithm {
 		}
 	}
 
-	private void crossOver(ArrayList<Chromosome> currentGeneration, ArrayList<Chromosome> newGeneration, int numberToCross) {
+	private void crossOver(ArrayList<Chromosome> currentGeneration, ArrayList<Chromosome> newGeneration, int numberToCross) throws Exception {
 		int size = currentGeneration.size();
 		int crossOverPoints = (int) Math.floor(crossOverProb * size);
 		ArrayList<Chromosome> toCross = selection(currentGeneration, numberToCross);
@@ -89,18 +89,22 @@ public class GeneticAlgorithm {
 			isOdd = true;
 
 		for (int i = 0; i < size;) {
-			Chromosome newChromossome = null;
-			Chromosome chromossome = toCross.get(i);
+			Chromosome chromosome = toCross.get(i);
 
 			// 0-1 2-3
 			// 0-1 2-3 4
 			if (i < size - 1) {
 				Chromosome chromossome2 = toCross.get(i + 1);
-				newChromossome = chromossome.crossOver(chromossome2, crossOverPoints);
+				Chromosome[] newChromosome = chromosome.crossOver(chromossome2, crossOverPoints);
+				// add the newly created Chromosomes
+				newGeneration.add(newChromosome[0]);
+				newGeneration.add(newChromosome[1]);
 			} else if (isOdd) {
-				newChromossome = chromossome.crossOver();
+				Chromosome newChromosome = chromosome.crossOver();
+				// add the Chromosome
+				newGeneration.add(newChromosome);
 			}
-			newGeneration.add(newChromossome);
+
 		}
 
 	}

@@ -48,10 +48,12 @@ public class Exam {
 		return year;
 	}
 
+	public Exam clone() {
+		return null;
+	}
+
 	public void setYear(int year) {
 		this.year = year;
 	}
-
-	 
 
 }

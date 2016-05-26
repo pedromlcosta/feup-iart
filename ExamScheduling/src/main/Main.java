@@ -20,10 +20,63 @@ public class Main {
 
 		System.out.println("correu");
 
+		// which exam reference do they get or is it the same? for all?
+		// for now we'll assume it's the same
+		ArrayList<Integer> o1 = new ArrayList<Integer>();
+		ArrayList<Integer> o2 = new ArrayList<Integer>();
+
+		o1.add(1);
+		o1.add(2);
+		o1.add(3);
+		o1.add(4);
+
+		o2.add(5);
+		o2.add(6);
+		o2.add(7);
+		o2.add(8);
+
+		ArrayList<Integer> c1 = new ArrayList<Integer>();
+		ArrayList<Integer> c2 = new ArrayList<Integer>();
+
+		c1.addAll(o1);
+		c2.addAll(o2);
+		int deltaPoint = Math.floorDiv(o2.size(), 4);
+		System.out.println(deltaPoint);
+		// 1 crossover Point in an array with 3 elements seria
+		// 0 - 1 para um deles (logo copia a pos 0) e iria i(0)+3 = 3
+		boolean copy = false;
+		for (int i = 0; i < o2.size(); i += deltaPoint) {
+			if (!copy) {
+				copy = true;
+				Main.replaceFrom(o2, c1, i + 1, i + deltaPoint);
+				Main.replaceFrom(o1, c2, i + 1, i + deltaPoint);
+			} else
+				copy = false;
+		}
+		for (Integer c : c1)
+			System.out.print(c + " ");
+
+		System.out.println(" ");
+
+		for (Integer c : c2)
+			System.out.print(c + " ");
+
 	}
 
 	public static ArrayList<Exam> getExams() {
 		return exams;
+	}
+
+	public static <T> void replaceFrom(ArrayList<T> toCopy, ArrayList<T> toFill, int startPos, int endPos) {
+		if (startPos == endPos && endPos < toCopy.size()) {
+			toFill.set(startPos, toCopy.get(startPos));
+			return;
+		}
+		for (int index = startPos; index < endPos; index++) {
+			toFill.set(index, toCopy.get(index));
+
+		}
+
 	}
 
 	public static void setExams(ArrayList<Exam> exams) {

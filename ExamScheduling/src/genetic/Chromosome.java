@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import info.Exam;
+import main.Main;
 
 public class Chromosome implements Comparable<Chromosome> {
 	private ArrayList<Exam> examsReference;// = Main.getExams();
@@ -26,16 +27,57 @@ public class Chromosome implements Comparable<Chromosome> {
 		genes = givenGenes;
 	}
 
+	public Chromosome(ArrayList<Exam> examsReference, ArrayList<Integer> genes, int score, double probability) {
+
+		this.genes = new ArrayList<Integer>();
+
+		this.examsReference = examsReference;
+		for (Integer gene : genes)
+			this.genes.add(gene.intValue());
+		this.score = score;
+		this.probability = probability;
+	}
+
 	/**
 	 * When we have 2 Chromosomes to cross
 	 * 
-	 * Problem it will return 2 chromossomes, need to address this
-	 * Should create Pair class?
+	 * Problem it will return 2 chromossomes, need to address this Should create
+	 * Pair class?
+	 * 
 	 * @return generated Chromosome
+	 * @throws Exception
 	 */
-	public Chromosome crossOver(Chromosome chromossome2, int crossOverPoints) {
-		// TODO Auto-generated method stub
-		return null;
+	// TODO should we use clone after all or it won't matter that the objects
+	// are the same?
+	public Chromosome[] crossOver(Chromosome chromosome, int crossOverPoints) throws Exception {
+		int size = chromosome.getGenes().size();
+
+		if (size != this.getGenes().size())
+			throw new Exception("Genes must have the same size");
+
+		// which exam reference do they get or is it the same? for all?
+		// for now we'll assume it's the same
+		Chromosome c1 = new Chromosome(examsReference);
+		Chromosome c2 = new Chromosome(examsReference);
+		ArrayList<Integer> chromossomeGenes = chromosome.getGenes();
+
+		c1.getGenes().addAll(genes);
+		c2.getGenes().addAll(chromossomeGenes);
+
+		int deltaPoint = Math.floorDiv(size, crossOverPoints);
+		boolean copy = false;
+		// 1 crossover Point in an array with 3 elements seria
+		// 0 - 1 para um deles (logo copia a pos 0) e iria i(0)+3 = 3
+		for (int i = 0; i < size; i += deltaPoint) {
+			if (!copy) {
+				copy = true;
+				Main.replaceFrom(chromossomeGenes, c1.getGenes(), i + 1, i + deltaPoint);
+				Main.replaceFrom(genes, c2.getGenes(), i + 1, i + deltaPoint);
+			} else
+				copy = false;
+
+		}
+		return new Chromosome[] { c1, c2 };
 
 	}
 
@@ -46,7 +88,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	 */
 	public Chromosome crossOver() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Chromosome(examsReference, genes, score, probability);
 	}
 
 	public void evaluate() {
