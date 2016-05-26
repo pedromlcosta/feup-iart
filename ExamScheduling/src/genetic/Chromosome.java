@@ -92,11 +92,11 @@ public class Chromosome implements Comparable<Chromosome> {
 	}
 
 	public void evaluate() {
+		// TODO ATRIBUI SCORE AO CROMOSSOMA
 		// TODO Auto-generated method stub
 
 	}
 
-	// TODO
 	public void mutate(Random seed, double mutationProb) {
 		int size = genes.size();
 		int limit = size + 1;
