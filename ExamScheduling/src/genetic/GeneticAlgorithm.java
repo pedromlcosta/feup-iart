@@ -51,11 +51,7 @@ public class GeneticAlgorithm {
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
 		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
-			// Might not be needed
 
-			// TODO might not be the best choice, since reference and all, wanna
-			// kepe the random aspect and such might not keep this and do one of
-			// my own that gets the X max from an Array
 			chromosomes.sort(null);
 
 			ArrayList<Chromosome> newGeneration = new ArrayList<Chromosome>();
@@ -77,8 +73,6 @@ public class GeneticAlgorithm {
 		}
 	}
 
-	// TODO the mutation should be done on a gene by gene basis right? so ignore
-	// the chromossome part?
 	private void mutate(ArrayList<Chromosome> newGeneration) {
 		for (Chromosome chromosome : newGeneration) {
 			chromosome.mutate(randomValues, mutationProb);
@@ -111,6 +105,13 @@ public class GeneticAlgorithm {
 
 	}
 
+	/**
+	 * Picks the Chromosomes that will "suffer" crossover
+	 * 
+	 * @param currentGeneration
+	 * @param numberToCross
+	 * @return
+	 */
 	public ArrayList<Chromosome> selection(ArrayList<Chromosome> currentGeneration, int numberToCross) {
 		int size = currentGeneration.size();
 		double probs[] = generateXRadomNumbers(numberToCross);

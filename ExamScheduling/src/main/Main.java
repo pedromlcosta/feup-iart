@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import annealing.SimulatedAnnealing;
 import genetic.GeneticAlgorithm;
 import info.Exam;
-import info.Prof;
 import info.Room;
 
 public class Main {
@@ -38,4 +37,29 @@ public class Main {
 	public static void setCommonExam(ArrayList<ArrayList<Integer>> commonExam) {
 		Main.commonExam = commonExam;
 	}
+
+	public static ArrayList<Room> getRooms() {
+		return rooms;
+	}
+
+	public static void setRooms(ArrayList<Room> rooms) {
+		Main.rooms = rooms;
+	}
+
+	public GeneticAlgorithm getGenetic() {
+		return genetic;
+	}
+
+	public void setGenetic(GeneticAlgorithm genetic) {
+		this.genetic = genetic;
+	}
+
+	public SimulatedAnnealing getAnnealing() {
+		return annealing;
+	}
+
+	public void setAnnealing(SimulatedAnnealing annealing) {
+		this.annealing = annealing;
+	}
+
 }
