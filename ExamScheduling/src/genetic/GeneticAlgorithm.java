@@ -43,7 +43,6 @@ public class GeneticAlgorithm {
 	public void skeleton() throws Exception {
 		// When the differene betweenGeneration is smaller than DIFF_LIMIT
 		int generationUnchanged = 0;
-
 		// assume que já recebe uma gereção inicial
 		// TODO do while or just while, a primeira solução "random" pode ser boa
 		// o sufeciente
@@ -90,7 +89,6 @@ public class GeneticAlgorithm {
 
 		for (int i = 0; i < size;) {
 			Chromosome chromosome = toCross.get(i);
-
 			// 0-1 2-3
 			// 0-1 2-3 4
 			if (i < size - 1) {
@@ -104,9 +102,7 @@ public class GeneticAlgorithm {
 				// add the Chromosome
 				newGeneration.add(newChromosome);
 			}
-
 		}
-
 	}
 
 	/**

@@ -6,18 +6,14 @@ import java.util.Date;
 import info.College.Season;
 
 public class Exam {
-	private String courseName;
 	private Date examDate;
 	private ArrayList<Student> signedUp = new ArrayList<Student>();
 	private Season examSeason;
 	private int year;
 
-	public String getCourseName() {
-		return courseName;
-	}
-
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
+	public void signUp(Student s) {
+		if (!signedUp.contains(s))
+			signedUp.add(s);
 	}
 
 	public Date getExamDate() {
