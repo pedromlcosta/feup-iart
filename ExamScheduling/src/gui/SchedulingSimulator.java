@@ -1,6 +1,7 @@
 package gui;
 
 import genetic.GeneticAlgorithm;
+import info.Season;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,9 +43,10 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e){
 		
 		if(e.getSource() == btnGeneticAlgorithm){
-			GeneticAlgorithm genetic = new GeneticAlgorithm();
+			GeneticAlgorithm genetic = new GeneticAlgorithm(manager.getUniversity());
 			try {
-				//genetic.run();
+				genetic.run(Season.NORMAL);
+				System.out.println("Here");
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

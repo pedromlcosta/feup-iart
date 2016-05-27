@@ -25,23 +25,23 @@ import javax.swing.JLabel;
 
 public class Manager {
 	
+	private static final int COL_WIDTH = 20;
+	
 	private Font subtitleFont;
 	private String currentFile;
 	private BufferedReader text;
 	private BufferedWriter textSave;
-	private University university;
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
-	private LinkedHashSet<String> courses;
+	
+	private University university;
 	private ArrayList<String> exams;
-	private static final int COL_WIDTH = 20;
-
+	
 	public Manager(){
 		
 		this.subtitleFont = new Font("Georgia",Font.BOLD,22);
 		this.currentFile = new String();
 		this.university = new University();
-		this.courses = new LinkedHashSet<String>();
 		this.exams = new ArrayList<String>();
 		Locale.setDefault(Locale.ENGLISH);
 	}
@@ -246,16 +246,6 @@ public class Manager {
 		return "";
 	}
 	
-	public LinkedHashSet<String> getCourses() {
-		
-		return courses;
-	}
-	
-	public void addCourse(String course){
-		
-		courses.add(course);
-	}
-
 	public void loadExams() {
 		
 		exams = university.getExamsDisplay();

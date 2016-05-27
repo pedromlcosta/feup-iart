@@ -1,13 +1,20 @@
 package genetic;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Random;
 
 import info.Exam;
 import main.Main;
 
 public class Chromosome implements Comparable<Chromosome> {
-	private ArrayList<Exam> examsReference;// = Main.getExams();
+
+	private ArrayList<Exam> examsReference;
+
+	// For 5 exams, there'll be 5 genes, each is a number, each number is a slot
+	// allocated
+	// to the corresponding exam
 	private ArrayList<Integer> genes;
 	private int score;
 	private double probability;
@@ -36,6 +43,38 @@ public class Chromosome implements Comparable<Chromosome> {
 			this.genes.add(gene.intValue());
 		this.score = score;
 		this.probability = probability;
+	}
+
+	public void generate(int nrSlots) {
+
+		if(nrSlots <= 0)
+			return;
+		
+		// Re-initize stuff
+		genes = new ArrayList<Integer>();
+		ArrayList<Integer> timeSlots = new ArrayList<Integer>();
+		Random rn = GeneticAlgorithm.getRandomValues();
+		
+		
+		for (int j = 0; j < nrSlots; j++) {
+			timeSlots.add(j);
+		}
+		
+		int totalSlots = timeSlots.size(); // to save how many slots there are actually
+
+		for (int i = 0; i < examsReference.size(); i++) {
+			
+			if (timeSlots.isEmpty()) {
+				int nextInt = rn.nextInt(totalSlots);
+				genes.add(nextInt);
+			} else {
+				int nextInt = rn.nextInt(timeSlots.size());
+				genes.add(timeSlots.get(nextInt));
+				timeSlots.remove(nextInt);
+			}
+
+		}
+		
 	}
 
 	/**
