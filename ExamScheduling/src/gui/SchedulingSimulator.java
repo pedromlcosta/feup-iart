@@ -45,7 +45,7 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 		if(e.getSource() == btnGeneticAlgorithm){
 			GeneticAlgorithm genetic = new GeneticAlgorithm(manager.getUniversity());
 			try {
-				genetic.run(Season.NORMAL);
+				genetic.run(Season.RESIT);
 				System.out.println("Here");
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block

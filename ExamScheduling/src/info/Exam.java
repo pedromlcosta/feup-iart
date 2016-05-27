@@ -12,7 +12,8 @@ public class Exam implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	private HashMap<Exam,Integer> commonStudents;
+	private HashMap<Integer,Integer> commonStudents;
+	private ArrayList<Exam> commonExams;
 	private ArrayList<Student> students;
 	private int year;
 	
@@ -23,7 +24,7 @@ public class Exam implements Serializable {
 		
 		this.name = name;
 		this.year = year;
-		this.commonStudents = new HashMap<Exam,Integer>();
+		this.commonStudents = new HashMap<Integer,Integer>();
 		this.students = new ArrayList<Student>();
 	}
 
@@ -40,7 +41,7 @@ public class Exam implements Serializable {
 		this.year = year;
 	}
 
-	public HashMap<Exam, Integer> getCommonStudents() {
+	public HashMap<Integer, Integer> getCommonStudents() {
 		
 		return commonStudents;
 	}
@@ -50,12 +51,12 @@ public class Exam implements Serializable {
 		return ts;
 	}
 
-	public void addCommonStudent(Exam e) {
+	public void addCommonStudent(Integer e) {
 		
 		commonStudents.put(e, 1);
 	}
 	
-	public void incCommonStudent(Exam minor) {
+	public void incCommonStudent(Integer minor) {
 		
 		commonStudents.put(minor,commonStudents.get(minor) + 1);
 	}

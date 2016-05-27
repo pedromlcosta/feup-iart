@@ -76,8 +76,9 @@ public class GeneticAlgorithm {
 		lastXGenerations = new ArrayList<ArrayList<Chromosome>>();
 		
 		generateChromosomes(nrChromosomes);
-		/*
+		
 		sumOfEvaluations = evaluateChromosomes(chromosomes);
+		/*
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
 		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
@@ -86,9 +87,11 @@ public class GeneticAlgorithm {
 
 			ArrayList<Chromosome> newGeneration = new ArrayList<Chromosome>();
 			elitistChoice(newGeneration);
-			// TODO ser a parte do crossover, not sure need to study more, tbh I
-			// kinda forgot almost everything about genetics
+			
 			crossOver(chromosomes, newGeneration, numberOfNonElitistChromosomes);
+			
+			mutate(newGeneration);
+			
 			newGenerationSum = evaluateChromosomes(newGeneration);
 
 			if (Math.abs(newGenerationSum - sumOfEvaluations) < DIFF_LIMIT)
@@ -96,7 +99,7 @@ public class GeneticAlgorithm {
 			else if (generationUnchanged > 0)
 				generationUnchanged = 0;
 
-			mutate(newGeneration);
+			
 			// mudança de geração
 			if (lastXGenerations.size() > xGenerations) {
 				// act like pop, remove the oldest one
@@ -107,6 +110,9 @@ public class GeneticAlgorithm {
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
 		}
+		
+		//CROMOSSOMA ESCOLHIDO
+		//chosenChromosome.registerTimeSlots(season);
 		*/
 		System.out.println("Finished the run");
 	}
@@ -115,18 +121,15 @@ public class GeneticAlgorithm {
 		
 		int nrTimeSlots = university.getTimeSlots(season).size();
 		ArrayList<Exam> exams = university.getExams(season); 
-		System.out.println("Generating chromosomes with: " + exams.size() + " exams");
+		System.out.println("Generating chromosomes with: " + exams.size() + " exams and " + nrTimeSlots + " timeslots");
 				
 		for(int i=0; i<nrChromosomes; i++){
-			
 			Chromosome chromosome = new Chromosome(exams);
 			chromosome.generate(nrTimeSlots);
+			chromosome.registerTimeSlots(university, season);
 			chromosomes.add(chromosome);
+			System.out.println("Chromosome " + i + " was generated");
 		}
-		//Check if all chromosomes were generated.
-		System.out.println("There are: " + chromosomes.size() + " chromosomes.");
-		System.out.println("Chromosome 2 has " + chromosomes.get(2).getGenes().size() + " genes.");
-		System.out.println(chromosomes.get(2).getGenes());
 		
 	}
 
@@ -205,9 +208,12 @@ public class GeneticAlgorithm {
 
 	private int evaluateChromosomes(ArrayList<Chromosome> toEvaluate) {
 		int sum = 0;
-		for (Chromosome chromossome : toEvaluate) {
-			chromossome.evaluate();
-			sum += chromossome.getScore();
+		for (int i = 0; i<toEvaluate.size();i++){
+			if(i==1){
+				System.out.println(toEvaluate.get(i).getGenes());
+			toEvaluate.get(i).evaluate();
+			sum += toEvaluate.get(i).getScore();
+			}
 		}
 		for (Chromosome chromossome : toEvaluate) {
 			chromossome.setProbability(chromossome.getScore() / (1.0 * sum) * 1.0);

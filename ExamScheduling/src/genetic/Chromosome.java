@@ -3,21 +3,69 @@ package genetic;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import info.Exam;
+import info.Season;
+import info.TimeSlot;
+import info.University;
 import main.Main;
 
 public class Chromosome implements Comparable<Chromosome> {
 
-	private ArrayList<Exam> examsReference;
+	
 
 	// For 5 exams, there'll be 5 genes, each is a number, each number is a slot
 	// allocated
 	// to the corresponding exam
+
+	Season season;
+	private ArrayList<Exam> examsReference;
+	private ArrayList<TimeSlot> allocatedSlots = new ArrayList<TimeSlot>();
+	
 	private ArrayList<Integer> genes;
-	private int score;
+	private int score = 0;
 	private double probability;
+	private int splitSeasonCount;
+
+	public void evaluate() {
+		//1a parcela -> cada exame em comum, vê a distancia entre datas,
+		//multiplica pelo nº alunos em comum e pelo fator do ano
+		for(int i = 0; i < examsReference.size(); i++){
+			System.out.println("Exam:" + examsReference.get(i).getName());
+			
+			TimeSlot date1 = allocatedSlots.get(i);
+			for (Entry<Integer, Integer> entry : examsReference.get(i).getCommonStudents().entrySet()) {
+			    Integer key = entry.getKey();
+			    
+			    int value = entry.getValue();
+			    //allocatedSlots.get(counter);
+			    //System.out.println("Exam:" + examsReference.get(i).getName());
+			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + value  + " students in common with keyID: " + key);
+			}
+			
+			
+		}
+		
+		//2a parcela
+	}
+
+	public void registerTimeSlots(University university, Season season) {
+
+		this.season = season;
+		this.splitSeasonCount = university.getTimeSlots(Season.NORMAL).size();
+		
+		allocatedSlots.clear();
+		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);
+		
+		System.out.println(genes);
+		
+		for (int i=0; i<genes.size(); i++) {
+			TimeSlot ts = seasonTimeslots.get(genes.get(i));
+			allocatedSlots.add(ts);
+		}
+	}
 
 	public Chromosome() {
 		examsReference = new ArrayList<Exam>();
@@ -47,20 +95,20 @@ public class Chromosome implements Comparable<Chromosome> {
 
 	public void generate(int nrSlots) {
 
-		if(nrSlots <= 0)
+		if (nrSlots <= 0)
 			return;
-		
+
 		// Re-initize stuff
 		genes = new ArrayList<Integer>();
 		ArrayList<Integer> timeSlots = new ArrayList<Integer>();
 		Random rn = GeneticAlgorithm.getRandomValues();
-		
-		
+
 		for (int j = 0; j < nrSlots; j++) {
 			timeSlots.add(j);
 		}
-		
-		int totalSlots = timeSlots.size(); // to save how many slots there are actually
+
+		int totalSlots = timeSlots.size(); // to save how many slots there are
+											// actually
 
 		for (int i = 0; i < examsReference.size(); i++) {
 			
@@ -72,9 +120,9 @@ public class Chromosome implements Comparable<Chromosome> {
 				genes.add(timeSlots.get(nextInt));
 				timeSlots.remove(nextInt);
 			}
-
+			System.out.println("Gene generated");
 		}
-		
+
 	}
 
 	/**
@@ -129,12 +177,6 @@ public class Chromosome implements Comparable<Chromosome> {
 	public Chromosome crossOver() {
 		// TODO Auto-generated method stub
 		return new Chromosome(examsReference, genes, score, probability);
-	}
-
-	public void evaluate() {
-		// TODO ATRIBUI SCORE AO CROMOSSOMA
-		// TODO Auto-generated method stub
-
 	}
 
 	public void mutate(Random seed, double mutationProb) {

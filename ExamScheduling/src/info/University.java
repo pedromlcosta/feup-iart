@@ -157,22 +157,22 @@ public class University implements Serializable {
 			if(s == auxS){
 				e = seasonExams.get(eInt - s.ordinal() * splitSeason);
 				if(examInt > eInt)
-					setRelationExams(exam, e);
+					setRelationExams(exam,examInt, eInt);
 				else
-					setRelationExams(e,exam);
+					setRelationExams(e,eInt,examInt);
 			}
 			else
 				e = exams.get(auxS).get(eInt - auxS.ordinal() * splitSeason); //to throw IndexOutOfBounds if exam doesn't exist
 		}
 	}
 
-	private void setRelationExams(Exam major, Exam minor) {
+	private void setRelationExams(Exam exam, Integer major, Integer minor) {
 		
-		Integer count = major.getCommonStudents().get(minor);
+		Integer count = exam.getCommonStudents().get(minor);
 		if(count != null)
-			major.incCommonStudent(minor);
+			exam.incCommonStudent(minor);
 		else
-			major.addCommonStudent(minor);
+			exam.addCommonStudent(minor);
 	}
 	
 	public ArrayList<Exam> getExams(Season season){
