@@ -18,6 +18,7 @@ public class GeneticAlgorithm {
 	private double mutationProb;
 	private static Random randomValues = new Random();
 	private double crossOverProb;
+	private int xGenerations = 5;
 
 	public GeneticAlgorithm() {
 	}
@@ -29,7 +30,7 @@ public class GeneticAlgorithm {
 		this.crossOverProb = CROSSOVER_DEFAULT;
 	}
 
-	public GeneticAlgorithm(ArrayList<Chromosome> chromosomes, double mutationProb, int elitistPicks, double crossOverProb) {
+	public GeneticAlgorithm(ArrayList<Chromosome> chromosomes, double mutationProb, int elitistPicks, double crossOverProb, int xGenerations) {
 		this.chromosomes = chromosomes;
 		if (elitistPicks < chromosomes.size())
 			this.elitistPicks = elitistPicks;
@@ -37,6 +38,7 @@ public class GeneticAlgorithm {
 			this.elitistPicks = Math.floorDiv(chromosomes.size(), 100);
 		this.mutationProb = mutationProb;
 		this.crossOverProb = crossOverProb;
+		this.xGenerations = xGenerations;
 	}
 
 	// TODO esqueleto do algoritmo
@@ -46,6 +48,7 @@ public class GeneticAlgorithm {
 		// assume que já recebe uma gereção inicial
 		// TODO do while or just while, a primeira solução "random" pode ser boa
 		// o sufeciente
+		ArrayList<ArrayList<Chromosome>> lastXGenerations = new ArrayList<ArrayList<Chromosome>>();
 		sumOfEvaluations = evaluateChromosomes(chromosomes);
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
 		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
@@ -67,6 +70,12 @@ public class GeneticAlgorithm {
 
 			mutate(newGeneration);
 			// mudança de geração
+			if (lastXGenerations.size() > xGenerations) {
+				// act like pop, remove the oldest one
+				lastXGenerations.remove(lastXGenerations.size() - 1);
+
+			}
+			lastXGenerations.add(chromosomes);
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
 		}
@@ -191,6 +200,18 @@ public class GeneticAlgorithm {
 
 	public double getCrossOverProb() {
 		return crossOverProb;
+	}
+
+	public int getxGenerations() {
+		return xGenerations;
+	}
+
+	public void setxGenerations(int xGenerations) {
+		this.xGenerations = xGenerations;
+	}
+
+	public static double getCrossoverDefault() {
+		return CROSSOVER_DEFAULT;
 	}
 
 	public void setCrossOverProb(double crossOverProb) {
