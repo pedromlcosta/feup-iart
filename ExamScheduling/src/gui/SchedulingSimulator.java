@@ -43,6 +43,12 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 		
 		if(e.getSource() == btnGeneticAlgorithm){
 			GeneticAlgorithm genetic = new GeneticAlgorithm();
+			try {
+				//genetic.run();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			lblGeneticStatus.setText("Clicked");
 		}
 	}
