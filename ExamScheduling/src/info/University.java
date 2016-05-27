@@ -238,11 +238,6 @@ public class University implements Serializable {
 		return timeslotsList;
 	}
 	
-	public ArrayList<TimeSlot> getTimeslots(Season season){
-		
-		return timeslots.get(season);
-	}
-	
 	public ArrayList<String> getExamsDisplay() {
 		
 		ArrayList<String> examsList = new ArrayList<String>();

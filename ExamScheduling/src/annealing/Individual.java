@@ -38,8 +38,8 @@ public class Individual {
 		//change the timeslot with y probability
 		if(Math.random() < changeTimeslotProb){
 			int permute = (int)(Math.random() * countExams);
-			int totalTimeslots = university.getTimeslots(season).size();
-			int splitCount = university.getTimeslots(Season.NORMAL).size() * season.ordinal();
+			int totalTimeslots = university.getTimeSlots(season).size();
+			int splitCount = university.getTimeSlots(Season.NORMAL).size() * season.ordinal();
 			
 			tmp.change(permute,totalTimeslots,splitCount);
 		}
