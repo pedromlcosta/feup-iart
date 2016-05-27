@@ -1,5 +1,7 @@
 package gui;
 
+import info.Season;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,7 +21,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-//import entities.Season;
 import net.miginfocom.swing.MigLayout;
 import utilities.Manager;
 
@@ -111,13 +112,13 @@ public class CardTimeslot extends CardPanel implements ActionListener {
 		add(btnAddTimeslots,"gapleft 20");
 	}
 	
-	/*private Season getActiveSeason(){
+	private Season getActiveSeason(){
 		
 		if(normalSeason.isSelected())
 			return Season.NORMAL;
 		else
 			return Season.RESIT;
-	}*/
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -155,11 +156,10 @@ public class CardTimeslot extends CardPanel implements ActionListener {
 				return;
 			}
 			
-			/*ArrayList<String> ts = manager.getUniversity().getTS(manager.dateToCalendar(bDate),manager.dateToCalendar(eDate),weekend.isSelected());
+			ArrayList<String> ts = manager.getUniversity().getTS(manager.dateToCalendar(bDate),manager.dateToCalendar(eDate),weekend.isSelected());
 			for(String tmp:ts)
 				for(int i=0; i < nbTs; i++)
 					manager.getUniversity().addTimeslot(getActiveSeason(), tmp);
-					*/
 			
 			clearFields();
 			clearTips();

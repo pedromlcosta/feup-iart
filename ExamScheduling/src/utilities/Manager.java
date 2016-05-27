@@ -1,5 +1,7 @@
 package utilities;
 
+import info.University;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedReader;
@@ -21,15 +23,13 @@ import java.util.Locale;
 
 import javax.swing.JLabel;
 
-//import entities.University;
-
 public class Manager {
 	
 	private Font subtitleFont;
 	private String currentFile;
 	private BufferedReader text;
 	private BufferedWriter textSave;
-	//private University university;
+	private University university;
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	private LinkedHashSet<String> courses;
@@ -40,7 +40,7 @@ public class Manager {
 		
 		this.subtitleFont = new Font("Georgia",Font.BOLD,22);
 		this.currentFile = new String();
-		//this.university = new University();
+		this.university = new University();
 		this.courses = new LinkedHashSet<String>();
 		this.exams = new ArrayList<String>();
 		Locale.setDefault(Locale.ENGLISH);
@@ -62,7 +62,6 @@ public class Manager {
 		return currentFile;
 	}
 	
-	/*
 	public University getUniversity() {
 		
 		return university;
@@ -72,7 +71,6 @@ public class Manager {
 		
 		university = new University();
 	}
-	*/
 
 	public Calendar dateToCalendar(Date date){
 		
@@ -86,7 +84,7 @@ public class Manager {
 		String ext = getExtension(file);
 		if(ext.equals("set")){
 			try {
-				//resetUniversity();
+				resetUniversity();
 				text = new BufferedReader(new FileReader(file));
 				
 				String[] args;
@@ -96,7 +94,7 @@ public class Manager {
 					tmp = text.readLine();
 					while(tmp != null && !tmp.equals("END EXAMS")){
 						args = tmp.split(",");
-						//university.addExam(args);
+						university.addExam(args);
 						tmp = text.readLine();
 					}
 					tmp = text.readLine();
@@ -105,7 +103,7 @@ public class Manager {
 					tmp = text.readLine();
 					while(tmp != null && !tmp.equals("END STUDENTS")){
 						args = tmp.split(",");
-						//university.addStudent(args);
+						university.addStudent(args);
 						tmp = text.readLine();
 					}
 					tmp = text.readLine();
@@ -114,7 +112,7 @@ public class Manager {
 					tmp = text.readLine();
 					while(tmp != null && !tmp.equals("END TIMESLOTS")){
 						args = tmp.split(",");
-						//university.addTimeslot(args);
+						university.addTimeslot(args);
 						tmp = text.readLine();
 					}
 				}
@@ -138,10 +136,10 @@ public class Manager {
 			}
 		}
 		else if(ext.equals("oef")){
-			/*try {
-				//resetUniversity();
+			try {
+				resetUniversity();
 				ois = new ObjectInputStream(new FileInputStream(file));
-				//university = (University)ois.readObject();
+				university = (University)ois.readObject();
 				ois.close();
 			} catch (FileNotFoundException e) {
 				System.err.println("Couldn't find the file: " + file.getAbsolutePath());
@@ -154,7 +152,7 @@ public class Manager {
 				System.err.println("Internal error: University class not found");
 				closeReadingBuffer("oef");
 				return false;
-			}*/
+			}
 		}
 		else
 			return false;
@@ -171,13 +169,13 @@ public class Manager {
 				textSave = new BufferedWriter(new FileWriter(file));
 				
 				textSave.write("START EXAMS\n");
-				//textSave.write(university.getExams());
+				textSave.write(university.getExams());
 				textSave.write("END EXAMS\n");
 				textSave.write("START STUDENTS\n");
-				//textSave.write(university.getStudents());
+				textSave.write(university.getStudents());
 				textSave.write("END STUDENTS\n");
 				textSave.write("START TIMESLOTS\n");
-				//textSave.write(university.getTimeslots());
+				textSave.write(university.getTimeslots());
 				textSave.write("END TIMESLOTS");
 				textSave.flush();
 				
@@ -195,7 +193,7 @@ public class Manager {
 			
 			try {
 				oos = new ObjectOutputStream(new FileOutputStream(file));
-				//oos.writeObject(university);
+				oos.writeObject(university);
 				oos.close();
 			} catch (FileNotFoundException e) {
 				System.err.println("Couldn't find the file: " + file.getAbsolutePath());
@@ -247,11 +245,6 @@ public class Manager {
 		
 		return "";
 	}
-
-	public void loadCourses() {
-		
-		//courses = university.getCoursesDisplay();
-	}
 	
 	public LinkedHashSet<String> getCourses() {
 		
@@ -265,7 +258,7 @@ public class Manager {
 
 	public void loadExams() {
 		
-		//exams = university.getExamsDisplay();
+		exams = university.getExamsDisplay();
 	}
 
 	public ArrayList<String> getExams() {

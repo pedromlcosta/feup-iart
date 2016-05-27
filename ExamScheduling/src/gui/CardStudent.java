@@ -120,7 +120,7 @@ public class CardStudent extends CardPanel implements ActionListener {
 			if(empty)
 				return;
 			
-			//manager.getUniversity().addStudent(student,examsStr);
+			manager.getUniversity().addStudent(student,examsStr);
 			clearFields();
 			clearTips();
 		}

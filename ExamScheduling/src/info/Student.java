@@ -1,86 +1,33 @@
 package info;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Student {
-	private static long LastStudentsNumber = 0;
-	private long studentNumber;
-	private int year;
-	private ArrayList<Exam> signedUpTo = new ArrayList<Exam>();
+public class Student implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private String name;
+	private ArrayList<Integer> exams;
 
-	public Student() {
-		year = 1;
-		studentNumber = LastStudentsNumber;
-		incLastStudentNumber();
+	public Student(String name){
+		
+		this.name = name;
+		this.exams = new ArrayList<Integer>();
 	}
 
-	public Student(int year, long studentNumber) {
-		this.year = year;
-		this.studentNumber = studentNumber;
-		setLastStudentsNumber(studentNumber);
-		incLastStudentNumber();
+	public String getName() {
+		
+		return name;
 	}
 
-	public long getStudentNumber() {
-		return studentNumber;
+	public ArrayList<Integer> getExams() {
+		
+		return exams;
 	}
 
-	public void setStudentNumber(long studentNumber) {
-		this.studentNumber = studentNumber;
+	public void addExams(ArrayList<Integer> exams) {
+		
+		this.exams = exams;
 	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public static long getLastStudentsNumber() {
-		return LastStudentsNumber;
-	}
-
-	public static void setLastStudentsNumber(long lastStudentsNumber) {
-		LastStudentsNumber = lastStudentsNumber;
-	}
-
-	public static void incLastStudentNumber() {
-		LastStudentsNumber++;
-	}
-
-	public ArrayList<Exam> getSignedUpTo() {
-		return signedUpTo;
-	}
-
-	public void setSignedUpTo(ArrayList<Exam> signedUpTo) {
-		this.signedUpTo = signedUpTo;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((signedUpTo == null) ? 0 : signedUpTo.hashCode());
-		result = prime * result + (int) (studentNumber ^ (studentNumber >>> 32));
-		result = prime * result + year;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Student other = (Student) obj;
-
-		if (studentNumber != other.studentNumber)
-			return false;
-
-		return true;
-	}
-
 }

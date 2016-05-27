@@ -1,55 +1,77 @@
 package info;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 
-import info.College.Season;
+import info.Student;
+import info.TimeSlot;
 
-public class Exam {
-	private Date examDate;
-	private ArrayList<Student> signedUp = new ArrayList<Student>();
-	private Season examSeason;
+public class Exam implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private String name;
+	private HashMap<Exam,Integer> commonStudents;
+	private ArrayList<Student> students;
 	private int year;
+	
 
-	public void signUp(Student s) {
-		if (!signedUp.contains(s))
-			signedUp.add(s);
+	private transient TimeSlot ts;
+	
+	public Exam(String name, int year){
+		
+		this.name = name;
+		this.year = year;
+		this.commonStudents = new HashMap<Exam,Integer>();
+		this.students = new ArrayList<Student>();
 	}
 
-	public Date getExamDate() {
-		return examDate;
-	}
-
-	public void setExamDate(Date examDate) {
-		this.examDate = examDate;
-	}
-
-	public ArrayList<Student> getSignedUp() {
-		return signedUp;
-	}
-
-	public void setSignedUp(ArrayList<Student> signedUp) {
-		this.signedUp = signedUp;
-	}
-
-	public Season getExamSeason() {
-		return examSeason;
-	}
-
-	public void setExamSeason(Season examSeason) {
-		this.examSeason = examSeason;
+	public String getName() {
+		
+		return name;
 	}
 
 	public int getYear() {
 		return year;
 	}
 
-	public Exam clone() {
-		return null;
-	}
-
 	public void setYear(int year) {
 		this.year = year;
 	}
 
+	public HashMap<Exam, Integer> getCommonStudents() {
+		
+		return commonStudents;
+	}
+	
+	public TimeSlot getTimeslot() {
+		
+		return ts;
+	}
+
+	public void addCommonStudent(Exam e) {
+		
+		commonStudents.put(e, 1);
+	}
+	
+	public void incCommonStudent(Exam minor) {
+		
+		commonStudents.put(minor,commonStudents.get(minor) + 1);
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		
+		if(!(obj instanceof Exam))
+			return false;
+		
+		Exam other = (Exam)obj;
+		return name.toLowerCase().equals(other.name.toLowerCase()) && (year == other.year);
+	}
+
+	public void addStudent(Student student) {
+		
+		students.add(student);
+	}
 }

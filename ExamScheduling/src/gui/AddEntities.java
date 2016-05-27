@@ -141,7 +141,7 @@ public class AddEntities extends JPanel implements ActionListener, ItemListener 
 			}	
 		}
 		else if(e.getSource() == btnCreateNewFile){
-			//manager.resetUniversity();
+			manager.resetUniversity();
 			textCurrentName.setText("NEW FILE");
 		}
 		else if(e.getSource() == btnSave){

@@ -5,13 +5,11 @@ import java.util.ArrayList;
 import annealing.SimulatedAnnealing;
 import genetic.GeneticAlgorithm;
 import info.Exam;
-import info.Room;
 
 public class Main {
 
 	static private ArrayList<Exam> exams;
 	static private ArrayList<ArrayList<Integer>> commonExam;
-	static private ArrayList<Room> rooms;
 
 	private GeneticAlgorithm genetic = new GeneticAlgorithm();
 	private SimulatedAnnealing annealing = new SimulatedAnnealing();
@@ -91,13 +89,6 @@ public class Main {
 		Main.commonExam = commonExam;
 	}
 
-	public static ArrayList<Room> getRooms() {
-		return rooms;
-	}
-
-	public static void setRooms(ArrayList<Room> rooms) {
-		Main.rooms = rooms;
-	}
 
 	public GeneticAlgorithm getGenetic() {
 		return genetic;
