@@ -175,6 +175,10 @@ public class University implements Serializable {
 			major.addCommonStudent(minor);
 	}
 	
+	public ArrayList<Exam> getExams(Season season){
+		return exams.get(season);
+	}
+	
 	public String getExams(){
 		
 		String examsList = new String();
@@ -208,6 +212,10 @@ public class University implements Serializable {
 			studentsList += "\n";
 		}
 		return studentsList;
+	}
+	
+	public ArrayList<TimeSlot> getTimeSlots(Season season){
+		return timeslots.get(season);
 	}
 	
 	public String getTimeslots() {
