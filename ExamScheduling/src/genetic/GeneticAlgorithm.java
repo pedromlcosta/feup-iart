@@ -16,7 +16,7 @@ public class GeneticAlgorithm {
 	private int elitistPicks;
 	private int sumOfEvaluations = 0;
 	private double mutationProb;
-	private Random randomValues = new Random();
+	private static Random randomValues = new Random();
 	private double crossOverProb;
 
 	public GeneticAlgorithm() {
@@ -209,12 +209,12 @@ public class GeneticAlgorithm {
 		return DIFF_LIMIT;
 	}
 
-	public Random getRandomValues() {
+	public static Random getRandomValues() {
 		return randomValues;
 	}
 
 	public void setRandomValues(Random randomValues) {
-		this.randomValues = randomValues;
+		GeneticAlgorithm.randomValues = randomValues;
 	}
 
 	public static double getCrossoverDefaultProb() {

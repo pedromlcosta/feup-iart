@@ -65,7 +65,8 @@ public class Chromosome implements Comparable<Chromosome> {
 		c2.getGenes().addAll(chromossomeGenes);
 
 		int deltaPoint = Math.floorDiv(size, crossOverPoints);
-		boolean copy = false;
+		// add a bit of random to the start
+		boolean copy = GeneticAlgorithm.getRandomValues().nextBoolean();
 		// 1 crossover Point in an array with 3 elements seria
 		// 0 - 1 para um deles (logo copia a pos 0) e iria i(0)+3 = 3
 		for (int i = 0; i < size; i += deltaPoint) {
