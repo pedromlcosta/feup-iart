@@ -27,11 +27,12 @@ public class Chromosome implements Comparable<Chromosome> {
 	private ArrayList<Integer> genes;
 	private int score = 0;
 	private double probability;
-	private int splitSeasonCount;
 
-	public void evaluate() {
+	public void evaluate(University university) {
 		//1a parcela -> cada exame em comum, vê a distancia entre datas,
 		//multiplica pelo nº alunos em comum e pelo fator do ano
+		int splitSeasonCount = university.getExams(Season.NORMAL).size();
+		
 		for(int i = 0; i < examsReference.size(); i++){
 			System.out.println("Exam:" + examsReference.get(i).getName());
 			
@@ -40,9 +41,8 @@ public class Chromosome implements Comparable<Chromosome> {
 			    Integer key = entry.getKey();
 			    
 			    int value = entry.getValue();
-			    //allocatedSlots.get(counter);
-			    //System.out.println("Exam:" + examsReference.get(i).getName());
-			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + value  + " students in common with keyID: " + key);
+			    System.out.println(splitSeasonCount);
+			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + value  + " students in common with exam " + examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + key);
 			}
 			
 			
@@ -54,7 +54,6 @@ public class Chromosome implements Comparable<Chromosome> {
 	public void registerTimeSlots(University university, Season season) {
 
 		this.season = season;
-		this.splitSeasonCount = university.getTimeSlots(Season.NORMAL).size();
 		
 		allocatedSlots.clear();
 		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);

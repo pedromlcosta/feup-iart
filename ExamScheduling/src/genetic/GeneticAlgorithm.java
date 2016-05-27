@@ -211,7 +211,7 @@ public class GeneticAlgorithm {
 		for (int i = 0; i<toEvaluate.size();i++){
 			if(i==1){
 				System.out.println(toEvaluate.get(i).getGenes());
-			toEvaluate.get(i).evaluate();
+			toEvaluate.get(i).evaluate(university);
 			sum += toEvaluate.get(i).getScore();
 			}
 		}
