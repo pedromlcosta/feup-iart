@@ -13,7 +13,6 @@ public class Main {
 
 	private GeneticAlgorithm genetic = new GeneticAlgorithm();
 	private SimulatedAnnealing annealing = new SimulatedAnnealing();
-
 	public static void main(String args[]) {
 
 		System.out.println("correu");
