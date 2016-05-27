@@ -40,7 +40,7 @@ public class GeneticAlgorithm {
 	}
 
 	// TODO esqueleto do algoritmo
-	public void skeleton() throws Exception {
+	public void run() throws Exception {
 		// When the differene betweenGeneration is smaller than DIFF_LIMIT
 		int generationUnchanged = 0;
 		// assume que já recebe uma gereção inicial

@@ -49,5 +49,7 @@ public class ExamScheduling {
 		ShowEntities panel2 = new ShowEntities(manager);
 		tabbedPane.addTab("Show Entities", null, panel2, "Display the current loaded entities");
 		
+		SchedulingSimulator panel3 = new SchedulingSimulator(manager);
+		tabbedPane.addTab("Simulate Scheduling", null, panel3, "Run algorithms to simluate exams schedules");
 	}
 }

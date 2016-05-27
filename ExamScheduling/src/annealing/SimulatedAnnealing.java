@@ -27,7 +27,7 @@ public class SimulatedAnnealing {
 		while(temperature > T_EPSILON){
 			newSolution = currentSolution.getNeighbour();
 			newCost = newSolution.getValue();
-			if(Math.random() < acceptNeighnour(oldCost,newCost))
+			if(Math.random() < acceptNeighbour(oldCost,newCost))
 				currentSolution = newSolution;
 			
 			temperature *= coolingRate;
@@ -41,7 +41,7 @@ public class SimulatedAnnealing {
 		return bestSolution;
 	}
 	
-	double acceptNeighnour(int oldCost, int newCost){
+	double acceptNeighbour(int oldCost, int newCost){
 		
 		return Math.exp((newCost-oldCost)/temperature);
 	}
