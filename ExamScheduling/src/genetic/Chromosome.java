@@ -49,6 +49,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	 */
 	// TODO should we use clone after all or it won't matter that the objects
 	// are the same?
+	
 	public Chromosome[] crossOver(Chromosome chromosome, int crossOverPoints) throws Exception {
 		int size = chromosome.getGenes().size();
 

@@ -230,6 +230,11 @@ public class University implements Serializable {
 		return timeslotsList;
 	}
 	
+	public ArrayList<TimeSlot> getTimeslots(Season season){
+		
+		return timeslots.get(season);
+	}
+	
 	public ArrayList<String> getExamsDisplay() {
 		
 		ArrayList<String> examsList = new ArrayList<String>();
@@ -246,14 +251,13 @@ public class University implements Serializable {
 		
 		if(seasonExams != null){
 			for(Exam exam: seasonExams){
-				String tmp = exam.getName() + " (" + exam.getYear() + ") - " + Season.NORMAL.name();
+				String tmp = exam.getName() + " (" + exam.getYear() + ") - " + Season.RESIT.name();
 				examsList.add(tmp);
 			}
 		}
 		
 		return examsList;
 	}
-
 
 	public boolean equals(Calendar bDate, Calendar eDate){
 		
