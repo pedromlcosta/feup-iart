@@ -119,7 +119,7 @@ public class GeneticAlgorithm {
 
 		for (int i = 0; i < probs.length;) {
 			double value = probs[i] * sumOfEvaluations;
-			for (int j = size - 1; j >= 0; j++) {
+			for (int j = 0; j < size; j++) {
 				Chromosome chromosome = currentGeneration.get(j);
 				value -= chromosome.getScore();
 				if (value <= 0) {
