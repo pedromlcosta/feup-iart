@@ -121,14 +121,14 @@ public class GeneticAlgorithm {
 		
 		int nrTimeSlots = university.getTimeSlots(season).size();
 		ArrayList<Exam> exams = university.getExams(season); 
-		System.out.println("Generating chromosomes with: " + exams.size() + " exams and " + nrTimeSlots + " timeslots");
+		//System.out.println("Generating chromosomes with: " + exams.size() + " exams and " + nrTimeSlots + " timeslots");
 				
 		for(int i=0; i<nrChromosomes; i++){
 			Chromosome chromosome = new Chromosome(exams);
 			chromosome.generate(nrTimeSlots);
 			chromosome.registerTimeSlots(university, season);
 			chromosomes.add(chromosome);
-			System.out.println("Chromosome " + i + " was generated");
+			//System.out.println("Chromosome " + i + " was generated");
 		}
 		
 	}

@@ -33,16 +33,22 @@ public class Chromosome implements Comparable<Chromosome> {
 		//multiplica pelo nº alunos em comum e pelo fator do ano
 		int splitSeasonCount = university.getExams(Season.NORMAL).size();
 		
+		System.out.println(genes);
+		
 		for(int i = 0; i < examsReference.size(); i++){
 			System.out.println("Exam:" + examsReference.get(i).getName());
 			
 			TimeSlot date1 = allocatedSlots.get(i);
+			
 			for (Entry<Integer, Integer> entry : examsReference.get(i).getCommonStudents().entrySet()) {
 			    Integer key = entry.getKey();
 			    
-			    int value = entry.getValue();
-			    System.out.println(splitSeasonCount);
-			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + value  + " students in common with exam " + examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + key);
+			    int nrCommonStudents = entry.getValue();
+			    TimeSlot date2 = allocatedSlots.get(key - season.ordinal() * splitSeasonCount);
+			    
+			    
+			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + nrCommonStudents  + " students in common with exam " + examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + (key - season.ordinal() * splitSeasonCount));
+			    System.out.println("TimeSlot for exam with keyID " + i + " is " + date1.toString() + " and the exam in common with keyID " + (key - season.ordinal() * splitSeasonCount) + " has timeslot " + date2.toString());
 			}
 			
 			
@@ -58,7 +64,6 @@ public class Chromosome implements Comparable<Chromosome> {
 		allocatedSlots.clear();
 		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);
 		
-		System.out.println(genes);
 		
 		for (int i=0; i<genes.size(); i++) {
 			TimeSlot ts = seasonTimeslots.get(genes.get(i));
@@ -119,7 +124,6 @@ public class Chromosome implements Comparable<Chromosome> {
 				genes.add(timeSlots.get(nextInt));
 				timeSlots.remove(nextInt);
 			}
-			System.out.println("Gene generated");
 		}
 
 	}
