@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JLabel;
@@ -75,6 +76,8 @@ public class Manager {
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
 		return cal;
 	}
 	
@@ -253,5 +256,89 @@ public class Manager {
 	public ArrayList<String> getExams() {
 		
 		return exams;
+	}
+
+	public String[] getTimes() {
+		
+		List<String> list = new ArrayList<String>();
+		for(int i=0; i < 24; i++){
+			list.add(String.format("%02d", i) + ":00");
+			list.add(String.format("%02d", i) + ":30");
+		}
+		
+		return list.toArray(new String[0]);
+	}
+
+	public long minutesElapsed(String timeStr){
+		
+		String times[] = timeStr.split(":");
+		return Integer.parseInt(times[0]) * 60 + Integer.parseInt(times[1]);
+	}
+	
+	public long diff(String startTimeStr, String endTimeStr) {
+		
+		return minutesElapsed(endTimeStr) - minutesElapsed(startTimeStr);
+	}
+	
+	public int[] timesToHours(long[] times){
+		
+		int[] hours = new int[times.length];
+		
+		for(int i=0; i < times.length; i++)
+			hours[i] = (int)(times[i] / 60);
+		
+		return hours;
+	}
+	
+	public int[] timesToMinutes(long[] times){
+		
+		int[] minutes = new int[times.length];
+		
+		for(int i=0; i < times.length; i++)
+			minutes[i] = (int)(times[i] % 60);
+		
+		return minutes;
+	}
+
+	public long[] calculateTimes(String startTimeStr, long time, int nbDivisions){
+		
+		long[] times = new long[nbDivisions];
+		long startTime = minutesElapsed(startTimeStr);
+		
+		//to not divide by 0
+		if(nbDivisions == 1){
+			time = ((int)(time/60))*30;
+			times[0] = startTime + time;
+		}
+		else{
+			long gap = (time / (nbDivisions - 1));
+			for(int index=0; index < nbDivisions; index++)
+				times[index] = startTime + ((int)(gap*index/30))*30;
+		}
+		
+		return times;
+	}
+	
+	public boolean valid(String time) {
+		
+		String[] times = time.split(":");
+		
+		if(times.length != 2)
+			return false;
+		
+		try{
+			int hours = Integer.parseInt(times[0]);
+			if (hours < 0 || hours > 23)
+				return false;
+			
+			int minutes = Integer.parseInt(times[1]);
+			if (minutes != 0 && minutes != 30)
+				return false;
+		}
+		catch(NumberFormatException e){
+			return false;
+		}
+		
+		return true;
 	}
 }

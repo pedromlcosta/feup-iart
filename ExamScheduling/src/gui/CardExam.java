@@ -117,10 +117,8 @@ public class CardExam extends CardPanel implements ActionListener {
 				manager.getUniversity().addExam(getActiveSeason(),name,Integer.parseInt(year));
 			
 			}
-			else{
+			else
 				manager.getUniversity().addExam(getActiveSeason(),name,Integer.parseInt(year));
-					
-			}
 		}
 	}
 

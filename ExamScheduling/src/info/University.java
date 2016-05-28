@@ -115,6 +115,28 @@ public class University implements Serializable {
 		timeslotsCount++;
 	}
 	
+	public void addTimeslot(Season activeSeason, Calendar calendar, int[] hours, int[] minutes) {
+		
+		if(hours.length != minutes.length)
+			return;
+		
+		for(int i=0; i < hours.length; i++){
+			Calendar tmp = (Calendar) calendar.clone();
+			tmp.set(Calendar.HOUR_OF_DAY, hours[i]);
+			tmp.set(Calendar.MINUTE,minutes[i]);
+			addTimeslot(activeSeason,tmp);
+		}
+	}
+
+	private void addTimeslot(Season season, Calendar calendar) {
+		
+		TimeSlot ts = new TimeSlot(calendar);
+		ArrayList<TimeSlot> seasonTimeslots = timeslots.get(season);
+		if(seasonTimeslots != null)
+			seasonTimeslots.add(ts);
+		timeslotsCount++;
+	}
+	
 	private void addStudentExams(Student student, String args) {
 		
 		try{
@@ -283,17 +305,18 @@ public class University implements Serializable {
 		return date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
 	}
 
-	public ArrayList<String> getTS(Calendar bDate, Calendar eDate, boolean weekendFlag) {
+	public ArrayList<Calendar> getTS(Calendar bDate, Calendar eDate, boolean weekendFlag) {
 		
-		ArrayList<String> ts = new ArrayList<String>();
+		ArrayList<Calendar> ts = new ArrayList<Calendar>();
 		
 		while(!equals(bDate,eDate)){
 			if(!blockDate(bDate,weekendFlag))
-				ts.add(bDate.get(Calendar.YEAR) + "-" + bDate.get(Calendar.MONTH) + "-" + bDate.get(Calendar.DAY_OF_MONTH));
+				ts.add((Calendar)bDate.clone());
 			bDate.add(Calendar.DATE,1);
 		}
-		ts.add(eDate.get(Calendar.YEAR) + "-" + eDate.get(Calendar.MONTH) + "-" + eDate.get(Calendar.DAY_OF_MONTH));
+		ts.add(eDate);
 		
 		return ts;
-	}	
+	}
+
 }

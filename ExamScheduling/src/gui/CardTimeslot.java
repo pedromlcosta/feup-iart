@@ -5,6 +5,7 @@ import info.Season;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 
@@ -15,6 +16,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -38,6 +40,10 @@ public class CardTimeslot extends CardPanel implements ActionListener {
 	private JDatePickerImpl beginDate;
 	private JDatePickerImpl endDate;
 	private JLabel lblnbTimeslotsTip;
+	private JSpinner beginTime;
+	private JLabel lblBeginTimeTip;
+	private JSpinner endTime;
+	private JLabel lblEndTimeTip;
 
 	public CardTimeslot(Manager manager) {
 		
@@ -75,11 +81,30 @@ public class CardTimeslot extends CardPanel implements ActionListener {
 		lblEndDateTip = new JLabel();
 		add(lblEndDateTip,"wrap");
 		
+		JLabel lblBeginTime = new JLabel("First possible exam time");
+		add(lblBeginTime,"gapleft 20, gaptop 5");
+		
+		beginTime = new JSpinner(new SpinnerListModel(manager.getTimes()));
+		add(beginTime, "gapleft 5");
+		
+		lblBeginTimeTip = new JLabel();
+		add(lblBeginTimeTip,"wrap");
+		
+		JLabel lblEndTime = new JLabel("Last possible exam time");
+		add(lblEndTime,"gapleft 20, gaptop 5");
+		
+		endTime = new JSpinner(new SpinnerListModel(manager.getTimes()));
+		add(endTime, "gapleft 5");
+		
+		lblEndTimeTip = new JLabel();
+		add(lblEndTimeTip,"wrap");
+		
 		JLabel lblNbTimeslots = new JLabel("Number of timeslots per date:");
 		add(lblNbTimeslots,"gapleft 20, gaptop 5");
 		
 		SpinnerNumberModel nbModel = new SpinnerNumberModel();
 		nbModel.setMinimum(1);
+		nbModel.setValue(1);
 		nbTimeslots = new JSpinner(nbModel);
 		JFormattedTextField field = ((JSpinner.DefaultEditor) nbTimeslots.getEditor()).getTextField();
 		field.setColumns(3);
@@ -148,18 +173,47 @@ public class CardTimeslot extends CardPanel implements ActionListener {
 			}
 			else lblnbTimeslotsTip.setText("");
 			
+			if(!empty){
+				if(eDate.before(bDate)){
+					lblEndDateTip.setText("Date must be equal or after");
+					empty = true;
+				}
+				else lblEndDateTip.setText("");
+			}
+			
+			String startTimeStr = (String)beginTime.getValue();
+			if(!manager.valid(startTimeStr)){
+				lblBeginTimeTip.setText("Time format not valid");
+				empty = true;
+			}
+			else lblBeginTimeTip.setText(""); 
+			
+			String endTimeStr = (String)endTime.getValue();
+			if(!manager.valid(endTimeStr)){
+				lblEndTimeTip.setText("Time format not valid");
+				empty = true;
+			}
+			else lblEndTimeTip.setText("");
+			
+			long diff = 0;
+			if(!empty){
+				diff = manager.diff(startTimeStr, endTimeStr);
+				if(diff <= 0){
+					lblEndTimeTip.setText("Time must be after");
+					empty = true;
+				}
+				else lblEndTimeTip.setText("");
+			}
+			
 			if(empty)
 				return;
 			
-			if(eDate.before(bDate)){
-				lblEndDateTip.setText("Date must be equal or after");
-				return;
-			}
-			
-			ArrayList<String> ts = manager.getUniversity().getTS(manager.dateToCalendar(bDate),manager.dateToCalendar(eDate),weekend.isSelected());
-			for(String tmp:ts)
-				for(int i=0; i < nbTs; i++)
-					manager.getUniversity().addTimeslot(getActiveSeason(), tmp);
+			long[] times = manager.calculateTimes(startTimeStr, diff, nbTs);
+			int[] hours = manager.timesToHours(times);
+			int[] minutes = manager.timesToMinutes(times);
+			ArrayList<Calendar> ts = manager.getUniversity().getTS(manager.dateToCalendar(bDate),manager.dateToCalendar(eDate),weekend.isSelected());
+			for(Calendar tmp:ts)
+				manager.getUniversity().addTimeslot(getActiveSeason(),tmp,hours, minutes);
 			
 			clearFields();
 			clearTips();
@@ -170,15 +224,16 @@ public class CardTimeslot extends CardPanel implements ActionListener {
 		
 		beginDate.getModel().setValue(null);
 		endDate.getModel().setValue(null);
-		nbTimeslots.setValue(0);
+		nbTimeslots.setValue(1);
 	}
 	
 	private void clearTips() {
 		
-	
 		lblBeginDateTip.setText("");
 		lblEndDateTip.setText("");
 		lblnbTimeslotsTip.setText("");
+		lblBeginTimeTip.setText("");
+		lblEndTimeTip.setText("");
 	}
 	
 	@Override

@@ -12,6 +12,11 @@ public class TimeSlot implements Serializable {
 	
 	//TODO: POR HORAS ... DEFINIR NO GUI
 
+	public TimeSlot(Calendar calendar){
+		
+		this.calendar = calendar;
+	}
+	
 	public TimeSlot(int year, int month, int day) {
 		
 		calendar = Calendar.getInstance();
@@ -27,7 +32,6 @@ public class TimeSlot implements Serializable {
 		return calendar.get(Calendar.YEAR);
 	}
 	
-
 	public int getMonth() {
 		
 		return calendar.get(Calendar.MONTH);
