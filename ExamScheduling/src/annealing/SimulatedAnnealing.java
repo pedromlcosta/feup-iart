@@ -33,6 +33,7 @@ public class SimulatedAnnealing {
 		
 		int oldCost, newCost, bestCost = 0;
 		currentSolution = new Individual();
+		currentSolution.generate(university.getTimeSlots(season).size(), university.getExams(season).size());
 		oldCost = currentSolution.getValue();
 		temperature = 1;
 		

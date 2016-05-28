@@ -21,6 +21,32 @@ public class Individual {
 		
 		return score;
 	}
+	
+	public void generate(int nrSlots, int nrExams) {
+
+		if (nrSlots <= 0)
+			return;
+		
+		ArrayList<Integer> ts = new ArrayList<Integer>();
+
+		for (int j = 0; j < nrSlots; j++)
+			ts.add(j);
+
+		int totalSlots = ts.size();
+
+		for (int i = 0; i < nrExams; i++) {
+			
+			if (ts.isEmpty()) {
+				int nextInt = (int) (Math.random() * totalSlots);
+				timeSlots.add(nextInt);
+			} else {
+				int nextInt = (int) (Math.random() * ts.size());
+				timeSlots.add(ts.get(nextInt));
+				ts.remove(nextInt);
+			}
+		}
+
+	}
 
 	public Individual getNeighbour(University university, Season season) {
 		
