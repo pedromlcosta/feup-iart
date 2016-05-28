@@ -2,6 +2,7 @@ package info;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class TimeSlot implements Serializable {
 
@@ -22,9 +23,10 @@ public class TimeSlot implements Serializable {
 	}
 	
 	public int getYear() {
-		//yep I know
+		
 		return calendar.get(Calendar.YEAR);
 	}
+	
 
 	public int getMonth() {
 		
@@ -37,6 +39,12 @@ public class TimeSlot implements Serializable {
 	}
 	
 	public int getWeekDay(){
+		
 		return calendar.get(Calendar.DAY_OF_WEEK);
 	}
+	
+	public long diff(TimeSlot ts) {
+        
+		return TimeUnit.MILLISECONDS.toMinutes(calendar.getTimeInMillis() - ts.calendar.getTimeInMillis());
+    }
 }

@@ -215,6 +215,7 @@ public class University implements Serializable {
 	}
 	
 	public ArrayList<TimeSlot> getTimeSlots(Season season){
+		
 		return timeslots.get(season);
 	}
 	
@@ -226,13 +227,13 @@ public class University implements Serializable {
 		
 		for(int i=0; i < splitCount; i++){
 			TimeSlot ts = seasonTS.get(i);
-			timeslotsList += i + "," + Season.NORMAL.name() + "," + ts.getYear() + "-" + String.format("%02d",ts.getMonth()) + "-" + String.format("%02d",ts.getDay()) + "\n";
+			timeslotsList += i + "," + Season.NORMAL.name() + "," + ts.getYear() + "-" + String.format("%02d",ts.getMonth() + 1) + "-" + String.format("%02d",ts.getDay()) + "\n";
 		}
 		seasonTS = timeslots.get(Season.RESIT);
 		
 		for(int i=0; i < seasonTS.size(); i++){
 			TimeSlot ts = seasonTS.get(i);
-			timeslotsList += (i+splitCount) + "," + Season.RESIT.name() + "," + ts.getYear() + "-" + String.format("%02d",ts.getMonth()) + "-" + String.format("%02d",ts.getDay()) + "\n";
+			timeslotsList += (i+splitCount) + "," + Season.RESIT.name() + "," + ts.getYear() + "-" + String.format("%02d",ts.getMonth() + 1) + "-" + String.format("%02d",ts.getDay()) + "\n";
 		}
 		
 		return timeslotsList;
