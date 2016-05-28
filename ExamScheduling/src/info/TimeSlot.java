@@ -17,10 +17,12 @@ public class TimeSlot implements Serializable {
 		this.calendar = calendar;
 	}
 	
-	public TimeSlot(int year, int month, int day) {
+	public TimeSlot(int year, int month, int day, int hour, int minute) {
 		
 		calendar = Calendar.getInstance();
 		calendar.set(year, month, day);
+		calendar.set(year, month, day, hour, minute, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
 	}
 	
 	public String toString(){
@@ -40,6 +42,16 @@ public class TimeSlot implements Serializable {
 	public int getDay() {
 		
 		return calendar.get(Calendar.DAY_OF_MONTH);
+	}
+	
+	public int getHour(){
+		
+		return calendar.get(Calendar.HOUR_OF_DAY);
+	}
+	
+	public int getMinute(){
+		
+		return calendar.get(Calendar.MINUTE);
 	}
 	
 	public int getWeekDay(){

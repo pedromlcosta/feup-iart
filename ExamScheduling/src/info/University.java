@@ -102,13 +102,22 @@ public class University implements Serializable {
 		}		
 	}
 
-	public void addTimeslot(Season season, String date) {
+	public void addTimeslot(Season season, String tsStr) {
 		
-		String[] dateArgs = date.split("-");
+		String[] tsArgs = tsStr.split(" ");
+		if(tsArgs.length != 2)
+			throw new IllegalArgumentException("Couldn't add a timeslot, timeslot format invalid");
+		
+		String[] dateArgs = tsArgs[0].split("-");
 		if(dateArgs.length != 3)
 			throw new IllegalArgumentException("Couldn't add a timeslot, date format invalid");
 		
-		TimeSlot ts = new TimeSlot(Integer.parseInt(dateArgs[0]),Integer.parseInt(dateArgs[1]),Integer.parseInt(dateArgs[2]));
+		String[] timeArgs = tsArgs[1].split(":");
+		if(timeArgs.length != 2)
+			throw new IllegalArgumentException("Couldn't add a timeslot, time format invalid");
+		
+		TimeSlot ts = new TimeSlot(Integer.parseInt(dateArgs[0]),Integer.parseInt(dateArgs[1]),Integer.parseInt(dateArgs[2]),
+				Integer.parseInt(timeArgs[0]), Integer.parseInt(timeArgs[1]));
 		ArrayList<TimeSlot> seasonTimeslots = timeslots.get(season);
 		if(seasonTimeslots != null)
 			seasonTimeslots.add(ts);
@@ -249,13 +258,17 @@ public class University implements Serializable {
 		
 		for(int i=0; i < splitCount; i++){
 			TimeSlot ts = seasonTS.get(i);
-			timeslotsList += i + "," + Season.NORMAL.name() + "," + ts.getYear() + "-" + String.format("%02d",ts.getMonth() + 1) + "-" + String.format("%02d",ts.getDay()) + "\n";
+			timeslotsList += i + "," + Season.NORMAL.name() + "," + ts.getYear() + "-" + String.format("%02d",ts.getMonth() + 1)
+					+ "-" + String.format("%02d",ts.getDay()) + " "
+					+ String.format("%02d",ts.getHour()) + ":" + String.format("%02d", ts.getMinute()) + "\n";
 		}
 		seasonTS = timeslots.get(Season.RESIT);
 		
 		for(int i=0; i < seasonTS.size(); i++){
 			TimeSlot ts = seasonTS.get(i);
-			timeslotsList += (i+splitCount) + "," + Season.RESIT.name() + "," + ts.getYear() + "-" + String.format("%02d",ts.getMonth() + 1) + "-" + String.format("%02d",ts.getDay()) + "\n";
+			timeslotsList += (i+splitCount) + "," + Season.RESIT.name() + "," + ts.getYear() + "-"
+			+ String.format("%02d",ts.getMonth() + 1) + "-" + String.format("%02d",ts.getDay()) + " "
+			+ String.format("%02d",ts.getHour()) + ":" + String.format("%02d", ts.getMinute()) + "\n";
 		}
 		
 		return timeslotsList;
