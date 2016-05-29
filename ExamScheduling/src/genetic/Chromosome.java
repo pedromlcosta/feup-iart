@@ -14,8 +14,6 @@ import main.Main;
 
 public class Chromosome implements Comparable<Chromosome> {
 
-	
-
 	// For 5 exams, there'll be 5 genes, each is a number, each number is a slot
 	// allocated
 	// to the corresponding exam
@@ -23,67 +21,67 @@ public class Chromosome implements Comparable<Chromosome> {
 	Season season;
 	private ArrayList<Exam> examsReference;
 	private ArrayList<TimeSlot> allocatedSlots = new ArrayList<TimeSlot>();
-	
+
 	private ArrayList<Integer> genes;
 	private int score = 0;
 	private double probability;
 
 	public void evaluate(University university) {
-		//1a parcela -> cada exame em comum, vê a distancia entre datas,
-		//multiplica pelo nº alunos em comum e pelo fator do ano
-		
+		// 1a parcela -> cada exame em comum, vê a distancia entre datas,
+		// multiplica pelo nº alunos em comum e pelo fator do ano
+
 		long scoreFirstParcel = 0;
 		int sameYearFactor = 2;
-		
+
 		int splitSeasonCount = university.getExams(Season.NORMAL).size();
-		
+
 		System.out.println(genes);
-		
-		for(int i = 0; i < examsReference.size(); i++){
+
+		for (int i = 0; i < examsReference.size(); i++) {
 			System.out.println("Exam:" + examsReference.get(i).getName());
-			
+
 			Exam exam = examsReference.get(i);
-			
+
 			TimeSlot examDate = allocatedSlots.get(i);
-			
+
 			// commonExam means the exam that has students in common
 			for (Entry<Integer, Integer> entry : examsReference.get(i).getCommonStudents().entrySet()) {
-			    Integer key = entry.getKey();
-			    
-			    Exam commonExam = examsReference.get(key - season.ordinal() * splitSeasonCount);
-			    int nrCommonStudents = entry.getValue();
-			    
-			    TimeSlot commonExamDate = allocatedSlots.get(key - season.ordinal() * splitSeasonCount);
-			    
-			    Long minuteDifference = examDate.diff(commonExamDate);
-			    
-			    if(exam.getYear() == commonExam.getYear()){
-			    	sameYearFactor = 2;
-			    }else{
-			    	sameYearFactor = 1;
-			    }
-			    
-			    scoreFirstParcel += minuteDifference * nrCommonStudents * sameYearFactor;		    
-			    
-			    
-			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + nrCommonStudents  + " students in common with exam " + examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + (key - season.ordinal() * splitSeasonCount));
-			    System.out.println("TimeSlot for exam with keyID " + i + " is " + examDate.toString() + " and the exam in common with keyID " + (key - season.ordinal() * splitSeasonCount) + " has timeslot " + commonExamDate.toString());
+				Integer key = entry.getKey();
+
+				Exam commonExam = examsReference.get(key - season.ordinal() * splitSeasonCount);
+				int nrCommonStudents = entry.getValue();
+
+				TimeSlot commonExamDate = allocatedSlots.get(key - season.ordinal() * splitSeasonCount);
+
+				Long minuteDifference = examDate.diff(commonExamDate);
+
+				if (exam.getYear() == commonExam.getYear()) {
+					sameYearFactor = 2;
+				} else {
+					sameYearFactor = 1;
+				}
+
+				scoreFirstParcel += minuteDifference * nrCommonStudents * sameYearFactor;
+
+				System.out.println("Exam " + examsReference.get(i).getName() + " with keyID: " + i + " has " + nrCommonStudents + " students in common with exam "
+						+ examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + (key - season.ordinal() * splitSeasonCount));
+				System.out.println("TimeSlot for exam with keyID " + i + " is " + examDate.toString() + " and the exam in common with keyID " + (key - season.ordinal() * splitSeasonCount)
+						+ " has timeslot " + commonExamDate.toString());
 			}
-			
-			
+
 		}
-		
-		//2a parcela
+
+		// 2a parcela
 		ArrayList<TimeSlot> allocatedSorted = new ArrayList<TimeSlot>(allocatedSlots);
 		allocatedSorted.sort(null);
-		
+
 		long scoreSecondParcel = 0;
-		for(int i=0; i < allocatedSorted.size()-1; i++){
-			scoreSecondParcel += allocatedSorted.get(i).diff(allocatedSorted.get(i+1));
-		}	
-		
+		for (int i = 0; i < allocatedSorted.size() - 1; i++) {
+			scoreSecondParcel += allocatedSorted.get(i).diff(allocatedSorted.get(i + 1));
+		}
+
 		long totalScore = scoreFirstParcel + scoreSecondParcel;
-		
+
 		System.out.println("First parcel: " + scoreFirstParcel);
 		System.out.println("Second parcel: " + scoreSecondParcel);
 		System.out.println("Total: " + totalScore);
@@ -92,12 +90,11 @@ public class Chromosome implements Comparable<Chromosome> {
 	public void registerTimeSlots(University university, Season season) {
 
 		this.season = season;
-		
+
 		allocatedSlots.clear();
 		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);
-		
-		
-		for (int i=0; i<genes.size(); i++) {
+
+		for (int i = 0; i < genes.size(); i++) {
 			TimeSlot ts = seasonTimeslots.get(genes.get(i));
 			allocatedSlots.add(ts);
 		}
@@ -147,7 +144,7 @@ public class Chromosome implements Comparable<Chromosome> {
 											// actually
 
 		for (int i = 0; i < examsReference.size(); i++) {
-			
+
 			if (timeSlots.isEmpty()) {
 				int nextInt = rn.nextInt(totalSlots);
 				genes.add(nextInt);
@@ -171,8 +168,9 @@ public class Chromosome implements Comparable<Chromosome> {
 	 */
 	// TODO should we use clone after all or it won't matter that the objects
 	// are the same?
-	
+
 	public Chromosome[] crossOver(Chromosome chromosome, int crossOverPoints) throws Exception {
+		//  System.out.println("Starting Cross Overs");
 		int size = chromosome.getGenes().size();
 
 		if (size != this.getGenes().size())
@@ -188,11 +186,18 @@ public class Chromosome implements Comparable<Chromosome> {
 		c2.getGenes().addAll(chromossomeGenes);
 
 		int deltaPoint = Math.floorDiv(size, crossOverPoints);
+
+		// System.out.println("size " + size);
+		// System.out.println("crossOverPoints " + crossOverPoints);
+		// System.out.println("DeltaPoint " + (size % crossOverPoints));
+		// System.out.println("DeltaPoint " + deltaPoint);
+
 		// add a bit of random to the start
 		boolean copy = GeneticAlgorithm.getRandomValues().nextBoolean();
 		// 1 crossover Point in an array with 3 elements seria
 		// 0 - 1 para um deles (logo copia a pos 0) e iria i(0)+3 = 3
 		for (int i = 0; i < size; i += deltaPoint) {
+			// System.out.println("I CROSS: " + i);
 			if (!copy) {
 				copy = true;
 				Main.replaceFrom(chromossomeGenes, c1.getGenes(), i + 1, i + deltaPoint);
@@ -201,6 +206,7 @@ public class Chromosome implements Comparable<Chromosome> {
 				copy = false;
 
 		}
+		// System.out.println("Ending Cross Overs");
 		return new Chromosome[] { c1, c2 };
 
 	}

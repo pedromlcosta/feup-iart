@@ -1,13 +1,10 @@
 package genetic;
 
+import java.util.ArrayList;
+import java.util.Random;
 import info.Exam;
 import info.Season;
 import info.University;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
 
 public class GeneticAlgorithm {
 
@@ -15,7 +12,7 @@ public class GeneticAlgorithm {
 
 	// TODO: POR VALORES AJUSTADOS
 	private static final double CROSSOVER_DEFAULT = 0.65;
-	private static final double MUTATION_DEFAULT_PROB = 0.0001;
+	private static final double MUTATION_DEFAULT_PROB = 0.25;
 	private static final int MINIMUM_LVL_GOOD_SOLUTION = 152;
 	private static final int UNCHANGED_GENERATION_LIMIT = 5;
 	private static final double DIFF_LIMIT = 0.001;
@@ -30,29 +27,23 @@ public class GeneticAlgorithm {
 	private int nrChromosomes = 50;
 	private int elitistPicks = 2;
 	private int sumOfEvaluations = 0;
-	private double mutationProb;
+	private double mutationProb = MUTATION_DEFAULT_PROB;
 	private static Random randomValues = new Random();
-	private double crossOverProb;
+	private double crossOverProb = CROSSOVER_DEFAULT;
 	private int xGenerations = 5;
 
 	public GeneticAlgorithm() {
 		chromosomes = new ArrayList<Chromosome>();
-		this.mutationProb = MUTATION_DEFAULT_PROB;
-		this.crossOverProb = CROSSOVER_DEFAULT;
 	}
 
 	public GeneticAlgorithm(University university) {
 		this.university = university;
 		chromosomes = new ArrayList<Chromosome>();
-		this.mutationProb = MUTATION_DEFAULT_PROB;
-		this.crossOverProb = CROSSOVER_DEFAULT;
 	}
 
 	public GeneticAlgorithm(University university, ArrayList<Chromosome> chromosomes) {
 		this.chromosomes = chromosomes;
 		this.elitistPicks = Math.floorDiv(chromosomes.size(), 100);
-		this.mutationProb = MUTATION_DEFAULT_PROB;
-		this.crossOverProb = CROSSOVER_DEFAULT;
 	}
 
 	public GeneticAlgorithm(University university, ArrayList<Chromosome> chromosomes, double mutationProb, int elitistPicks, double crossOverProb, int xGenerations) {
@@ -80,7 +71,7 @@ public class GeneticAlgorithm {
 		sumOfEvaluations = evaluateChromosomes(chromosomes);
 
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
-		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
+		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations > MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
 
 			chromosomes.sort(null);
@@ -155,19 +146,23 @@ public class GeneticAlgorithm {
 	}
 
 	private void crossOver(ArrayList<Chromosome> currentGeneration, ArrayList<Chromosome> newGeneration, int numberToCross) throws Exception {
-		int size = currentGeneration.size();
-		int crossOverPoints = (int) Math.floor(crossOverProb * size);
+		int geneSize = currentGeneration.get(0).getGenes().size();
+		int crossOverPoints = (int) Math.floor(crossOverProb * geneSize);
+
 		ArrayList<Chromosome> toCross = selection(currentGeneration, numberToCross);
+		// System.out.println("Select Things to Cross");
+		// System.out.println("CrossOver points: " + crossOverPoints);
+
 		boolean isOdd = false;
 
-		if (size % 2 != 0)
+		if (numberToCross % 2 != 0)
 			isOdd = true;
 
-		for (int i = 0; i < size;) {
+		for (int i = 0; i < numberToCross; i++) {
 			Chromosome chromosome = toCross.get(i);
 			// 0-1 2-3
 			// 0-1 2-3 4
-			if (i < size - 1) {
+			if (i < numberToCross - 1) {
 				Chromosome chromossome2 = toCross.get(i + 1);
 				Chromosome[] newChromosome = chromosome.crossOver(chromossome2, crossOverPoints);
 				// add the newly created Chromosomes
@@ -189,13 +184,15 @@ public class GeneticAlgorithm {
 	 * @return
 	 */
 	public ArrayList<Chromosome> selection(ArrayList<Chromosome> currentGeneration, int numberToCross) {
+		System.out.println("Selection Start: " + numberToCross);
 		int size = currentGeneration.size();
 		double probs[] = generateNRandomNumbers(numberToCross);
 		ArrayList<Chromosome> toCross = new ArrayList<Chromosome>();
 
-		for (int i = 0; i < probs.length;) {
+		for (int i = 0; i < probs.length; i++) {
 			double value = probs[i] * sumOfEvaluations;
 			for (int j = 0; j < size; j++) {
+
 				Chromosome chromosome = currentGeneration.get(j);
 				value -= chromosome.getScore();
 				if (value <= 0) {
@@ -203,7 +200,10 @@ public class GeneticAlgorithm {
 					break;
 				}
 			}
+			if (toCross.size() == numberToCross)
+				break;
 		}
+		System.out.println("Selection End");
 		return toCross;
 	}
 
