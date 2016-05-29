@@ -83,6 +83,10 @@ public class Chromosome implements Comparable<Chromosome> {
 		}	
 		
 		long totalScore = scoreFirstParcel + scoreSecondParcel;
+		
+		System.out.println("First parcel: " + scoreFirstParcel);
+		System.out.println("Second parcel: " + scoreSecondParcel);
+		System.out.println("Total: " + totalScore);
 	}
 
 	public void registerTimeSlots(University university, Season season) {
