@@ -31,6 +31,10 @@ public class Chromosome implements Comparable<Chromosome> {
 	public void evaluate(University university) {
 		//1a parcela -> cada exame em comum, vê a distancia entre datas,
 		//multiplica pelo nº alunos em comum e pelo fator do ano
+		
+		long score = 0;
+		int sameYearFactor = 2;
+		
 		int splitSeasonCount = university.getExams(Season.NORMAL).size();
 		
 		System.out.println(genes);
@@ -38,23 +42,41 @@ public class Chromosome implements Comparable<Chromosome> {
 		for(int i = 0; i < examsReference.size(); i++){
 			System.out.println("Exam:" + examsReference.get(i).getName());
 			
-			TimeSlot date1 = allocatedSlots.get(i);
+			Exam exam = examsReference.get(i);
 			
+			TimeSlot examDate = allocatedSlots.get(i);
+			
+			// commonExam means the exam that has students in common
 			for (Entry<Integer, Integer> entry : examsReference.get(i).getCommonStudents().entrySet()) {
 			    Integer key = entry.getKey();
 			    
+			    Exam commonExam = examsReference.get(key - season.ordinal() * splitSeasonCount);
 			    int nrCommonStudents = entry.getValue();
-			    TimeSlot date2 = allocatedSlots.get(key - season.ordinal() * splitSeasonCount);
+			    
+			    TimeSlot commonExamDate = allocatedSlots.get(key - season.ordinal() * splitSeasonCount);
+			    
+			    Long minuteDifference = examDate.diff(commonExamDate);
+			    
+			    if(exam.getYear() == commonExam.getYear()){
+			    	sameYearFactor = 2;
+			    }else{
+			    	sameYearFactor = 1;
+			    }
+			    
+			    score += minuteDifference * nrCommonStudents * sameYearFactor;		    
 			    
 			    
 			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + nrCommonStudents  + " students in common with exam " + examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + (key - season.ordinal() * splitSeasonCount));
-			    System.out.println("TimeSlot for exam with keyID " + i + " is " + date1.toString() + " and the exam in common with keyID " + (key - season.ordinal() * splitSeasonCount) + " has timeslot " + date2.toString());
+			    System.out.println("TimeSlot for exam with keyID " + i + " is " + examDate.toString() + " and the exam in common with keyID " + (key - season.ordinal() * splitSeasonCount) + " has timeslot " + commonExamDate.toString());
 			}
 			
 			
 		}
 		
 		//2a parcela
+		ArrayList<TimeSlot> allocatedSorted = new ArrayList<TimeSlot>(allocatedSlots);
+		
+		
 	}
 
 	public void registerTimeSlots(University university, Season season) {

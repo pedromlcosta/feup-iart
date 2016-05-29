@@ -61,6 +61,6 @@ public class TimeSlot implements Serializable {
 	
 	public long diff(TimeSlot ts) {
         
-		return TimeUnit.MILLISECONDS.toMinutes(calendar.getTimeInMillis() - ts.calendar.getTimeInMillis());
+		return TimeUnit.MILLISECONDS.toMinutes(Math.abs(calendar.getTimeInMillis() - ts.calendar.getTimeInMillis()));
     }
 }
