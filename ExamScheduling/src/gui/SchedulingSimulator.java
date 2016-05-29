@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import annealing.Individual;
 import annealing.SimulatedAnnealing;
 import net.miginfocom.swing.MigLayout;
 import utilities.Manager;
@@ -60,7 +61,7 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 		}
 		else if(e.getSource() == btnSimulatedAnnealing){
 			SimulatedAnnealing sa = new SimulatedAnnealing(manager.getUniversity());
-			sa.search(Season.NORMAL);
+			sa.schedule(sa.search(Season.NORMAL),Season.NORMAL);
 
 		}
 	}

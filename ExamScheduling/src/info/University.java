@@ -19,6 +19,7 @@ public class University implements Serializable {
 	private HashMap<Season,ArrayList<TimeSlot>> timeslots;
 	private int examsCount;
 	private int timeslotsCount;
+	private boolean activeSchedule;
 
 	public University(){
 		
@@ -31,6 +32,8 @@ public class University implements Serializable {
 		timeslots.put(Season.NORMAL, new ArrayList<TimeSlot>());
 		timeslots.put(Season.RESIT, new ArrayList<TimeSlot>());
 		timeslotsCount = 0;
+		
+		activeSchedule = false;
 	}
 	
 	public void addExam(String[] args) {
@@ -336,44 +339,14 @@ public class University implements Serializable {
 	
 	public ArrayList<Exam> getResult(Season season){
 		
-		ArrayList<Exam> examsSorted = cloneExams(exams.get(season));
-		Collections.sort(examsSorted, (e1, e2) -> e1.compareTo(e2));
-		return examsSorted;
+		if(activeSchedule){
+			ArrayList<Exam> examsSorted = cloneExams(exams.get(season));
+			Collections.sort(examsSorted, (e1, e2) -> e1.compareTo(e2));
+			return examsSorted;
+		}
+		return null;
 	}
 	
-	private ArrayList<Exam> debug(){
-			
-		ArrayList<Exam> exams = new ArrayList<Exam>();
-		Exam exam1 = new Exam("Algebra",1);
-		exam1.setTimeslot(new TimeSlot(2016,8,8,8,0));
-		Exam exam2 = new Exam("Geometry",1);
-		exam2.setTimeslot(new TimeSlot(2016,8,6,9,0));
-		Exam exam3 = new Exam("Logic",1);
-		exam3.setTimeslot(new TimeSlot(2016,8,5,9,0));
-		Exam exam4 = new Exam("Set",1);
-		exam4.setTimeslot(new TimeSlot(2016,8,7,16,0));
-		Exam exam5 = new Exam("Plus",1);
-		exam5.setTimeslot(new TimeSlot(2016,8,14,9,0));
-		Exam exam6 = new Exam("Div",1);
-		exam6.setTimeslot(new TimeSlot(2016,8,15,9,0));
-		Exam exam7 = new Exam("Less",1);
-		exam7.setTimeslot(new TimeSlot(2016,8,22,14,0));
-		Exam exam8 = new Exam("Mult",1);
-		exam8.setTimeslot(new TimeSlot(2016,8,28,14,0));
-		
-		exams.add(exam1);
-		exams.add(exam2);
-		exams.add(exam3);
-		exams.add(exam4);
-		exams.add(exam5);
-		exams.add(exam5);
-		exams.add(exam6);
-		exams.add(exam7);
-		exams.add(exam8);
-		
-		return exams;
-	}
-
 	public String format(Exam exam) {
 		
 		return exam.getName() + " (" + exam.getYear() + ")";
@@ -390,5 +363,10 @@ public class University implements Serializable {
 		}
 		
 		return exams;
+	}
+
+	public void setActiveSchedule(boolean flag){
+		
+		activeSchedule = flag;
 	}
 }

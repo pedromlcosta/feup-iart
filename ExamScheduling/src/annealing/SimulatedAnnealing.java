@@ -58,6 +58,10 @@ public class SimulatedAnnealing {
 				oldCost = newCost;
 			}
 			
+			System.out.println("best cost " + bestCost);
+			System.out.println("old cost "+ oldCost);
+			System.out.println("new cost " + newCost);
+			
 			temperature *= coolingRate;
 			
 			if(newCost > bestCost){
@@ -67,6 +71,13 @@ public class SimulatedAnnealing {
 		}
 		
 		return bestSolution;
+	}
+	
+	public void schedule(Individual solution, Season season){
+		
+		if(solution == null)
+			return;
+		solution.schedule(university, season);
 	}
 	
 	boolean acceptNeighbour(long deltaCost){

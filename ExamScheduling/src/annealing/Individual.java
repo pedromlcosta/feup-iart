@@ -182,4 +182,16 @@ public class Individual {
 		
 		changeTimeslotProb = ctp;
 	}
+
+	public void schedule(University university, Season season) {
+		
+		ArrayList<Exam> exams = university.getExams(season);
+		if(exams.size() != allocatedSlots.size())
+			return;
+		for(int i=0; i < exams.size(); i++)
+			exams.get(i).setTimeslot(allocatedSlots.get(i));
+		
+		System.out.println("Scheduling");
+		university.setActiveSchedule(true);
+	}
 }
