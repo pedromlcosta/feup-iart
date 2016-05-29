@@ -10,23 +10,22 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class GeneticAlgorithm {
-	
-	//TODO: TEMPORIZAR TUDO PARA CALCULAR PERFORMANCES
-	
-	
+
+	// TODO: TEMPORIZAR TUDO PARA CALCULAR PERFORMANCES
+
 	// TODO: POR VALORES AJUSTADOS
 	private static final double CROSSOVER_DEFAULT = 0.65;
 	private static final double MUTATION_DEFAULT_PROB = 0.0001;
 	private static final int MINIMUM_LVL_GOOD_SOLUTION = 152;
 	private static final int UNCHANGED_GENERATION_LIMIT = 5;
 	private static final double DIFF_LIMIT = 0.001;
-	
+
 	private University university;
 	private Season season = null;
 	private ArrayList<Chromosome> chromosomes;
-	ArrayList<ArrayList<Chromosome>> lastXGenerations;
+	ArrayList<Chromosome> lastXGenerations;
 	int generationUnchanged = 0;
-	
+
 	// At least 30 chromosomes -> statistically relevant
 	private int nrChromosomes = 50;
 	private int elitistPicks = 2;
@@ -36,12 +35,12 @@ public class GeneticAlgorithm {
 	private double crossOverProb;
 	private int xGenerations = 5;
 
-	public GeneticAlgorithm(){
+	public GeneticAlgorithm() {
 		chromosomes = new ArrayList<Chromosome>();
 		this.mutationProb = MUTATION_DEFAULT_PROB;
 		this.crossOverProb = CROSSOVER_DEFAULT;
 	}
-	
+
 	public GeneticAlgorithm(University university) {
 		this.university = university;
 		chromosomes = new ArrayList<Chromosome>();
@@ -67,18 +66,19 @@ public class GeneticAlgorithm {
 		this.xGenerations = xGenerations;
 	}
 
-	// Runs the algorithm for a certain season, with the info present in the system
+	// Runs the algorithm for a certain season, with the info present in the
+	// system
 	public void run(Season season) throws Exception {
-		
+
 		// (Re)Initializing variables for this run.
 		this.season = season;
 		generationUnchanged = 0;
-		lastXGenerations = new ArrayList<ArrayList<Chromosome>>();
-		
+		lastXGenerations = new ArrayList<Chromosome>();
+
 		generateChromosomes(nrChromosomes);
-		
+
 		sumOfEvaluations = evaluateChromosomes(chromosomes);
-		/*
+
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
 		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
@@ -87,11 +87,11 @@ public class GeneticAlgorithm {
 
 			ArrayList<Chromosome> newGeneration = new ArrayList<Chromosome>();
 			elitistChoice(newGeneration);
-			
+
 			crossOver(chromosomes, newGeneration, numberOfNonElitistChromosomes);
-			
+
 			mutate(newGeneration);
-			
+
 			newGenerationSum = evaluateChromosomes(newGeneration);
 
 			if (Math.abs(newGenerationSum - sumOfEvaluations) < DIFF_LIMIT)
@@ -99,38 +99,53 @@ public class GeneticAlgorithm {
 			else if (generationUnchanged > 0)
 				generationUnchanged = 0;
 
-			
 			// mudança de geração
 			if (lastXGenerations.size() > xGenerations) {
 				// act like pop, remove the oldest one
 				lastXGenerations.remove(lastXGenerations.size() - 1);
 
 			}
-			lastXGenerations.add(chromosomes);
+			// a pos 0 é a melhor da geração logo escolhemos o melhor da geração
+			lastXGenerations.add(chromosomes.get(0));
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
 		}
-		
-		//CROMOSSOMA ESCOLHIDO
-		//chosenChromosome.registerTimeSlots(season);
-		*/
+
+		// CROMOSSOMA ESCOLHIDO
+		Chromosome chosenChromosome = genGenMax(lastXGenerations);
+		// chosenChromosome.registerTimeSlots(season);
+
 		System.out.println("Finished the run");
 	}
 
+	private Chromosome genGenMax(ArrayList<Chromosome> cL) {
+		int scoreMax = -1;
+		Chromosome best = null;
+		for (Chromosome c : cL) {
+			if (c.getScore() > scoreMax) {
+				scoreMax = c.getScore();
+				best = c;
+			}
+
+		}
+		return best;
+	}
+
 	private void generateChromosomes(int nrChromosomes) {
-		
+
 		int nrTimeSlots = university.getTimeSlots(season).size();
-		ArrayList<Exam> exams = university.getExams(season); 
-		//System.out.println("Generating chromosomes with: " + exams.size() + " exams and " + nrTimeSlots + " timeslots");
-				
-		for(int i=0; i<nrChromosomes; i++){
+		ArrayList<Exam> exams = university.getExams(season);
+		// System.out.println("Generating chromosomes with: " + exams.size() + "
+		// exams and " + nrTimeSlots + " timeslots");
+
+		for (int i = 0; i < nrChromosomes; i++) {
 			Chromosome chromosome = new Chromosome(exams);
 			chromosome.generate(nrTimeSlots);
 			chromosome.registerTimeSlots(university, season);
 			chromosomes.add(chromosome);
-			//System.out.println("Chromosome " + i + " was generated");
+			// System.out.println("Chromosome " + i + " was generated");
 		}
-		
+
 	}
 
 	private void mutate(ArrayList<Chromosome> newGeneration) {
@@ -208,11 +223,11 @@ public class GeneticAlgorithm {
 
 	private int evaluateChromosomes(ArrayList<Chromosome> toEvaluate) {
 		int sum = 0;
-		for (int i = 0; i<toEvaluate.size();i++){
-			if(i==1){
+		for (int i = 0; i < toEvaluate.size(); i++) {
+			if (i == 1) {
 				System.out.println(toEvaluate.get(i).getGenes());
-			toEvaluate.get(i).evaluate(university);
-			sum += toEvaluate.get(i).getScore();
+				toEvaluate.get(i).evaluate(university);
+				sum += toEvaluate.get(i).getScore();
 			}
 		}
 		for (Chromosome chromossome : toEvaluate) {
