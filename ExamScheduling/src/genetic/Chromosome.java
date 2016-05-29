@@ -23,7 +23,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	private ArrayList<TimeSlot> allocatedSlots = new ArrayList<TimeSlot>();
 
 	private ArrayList<Integer> genes;
-	private int score = 0;
+	private long score = 0;
 	private double probability;
 
 	public void evaluate(University university) {
@@ -62,9 +62,10 @@ public class Chromosome implements Comparable<Chromosome> {
 					sameYearFactor = 1;
 				}
 
-				System.out.println("Date difference score: " + minuteDifference);
-				System.out.println("nrCommonStudents: " + nrCommonStudents);
-				System.out.println("same Year Factor: " + sameYearFactor);
+				// System.out.println("Date difference score: " +
+				// minuteDifference);
+				// System.out.println("nrCommonStudents: " + nrCommonStudents);
+				// System.out.println("same Year Factor: " + sameYearFactor);
 				scoreFirstParcel += minuteDifference * nrCommonStudents * sameYearFactor;
 
 				// System.out.println("Exam " + examsReference.get(i).getName()
@@ -83,7 +84,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		// 2a parcela
 		ArrayList<TimeSlot> allocatedSorted = new ArrayList<TimeSlot>(allocatedSlots);
 
-		System.out.println("These genes correspond to the times: ");
+		// System.out.println("These genes correspond to the times: ");
 		for (int i = 0; i < allocatedSorted.size(); i++) {
 			System.out.println(allocatedSorted.get(i).toString());
 		}
@@ -99,11 +100,12 @@ public class Chromosome implements Comparable<Chromosome> {
 			scoreSecondParcel += diff;
 		}
 
-		long totalScore = scoreFirstParcel + scoreSecondParcel;
+		score = scoreFirstParcel + scoreSecondParcel;
+		//System.out.println(score);
 
-		System.out.println("First parcel: " + scoreFirstParcel);
-		System.out.println("Second parcel: " + scoreSecondParcel);
-		System.out.println("Total: " + totalScore);
+		// System.out.println("First parcel: " + scoreFirstParcel);
+		// System.out.println("Second parcel: " + scoreSecondParcel);
+		// System.out.println("Total: " + totalScore);
 	}
 
 	public void registerTimeSlots(University university, Season season) {
@@ -134,7 +136,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		genes = givenGenes;
 	}
 
-	public Chromosome(ArrayList<Exam> examsReference, ArrayList<Integer> genes, int score, double probability) {
+	public Chromosome(ArrayList<Exam> examsReference, ArrayList<Integer> genes, long score, double probability) {
 
 		this.genes = new ArrayList<Integer>();
 
@@ -210,21 +212,48 @@ public class Chromosome implements Comparable<Chromosome> {
 		// System.out.println("crossOverPoints " + crossOverPoints);
 		// System.out.println("DeltaPoint " + (size % crossOverPoints));
 		// System.out.println("DeltaPoint " + deltaPoint);
+		//
+		// System.out.print("[ ");
+		// for (Integer i : chromossomeGenes) {
+		// System.out.print(i + " ");
+		// }
+		// System.out.println("] ");
+		// System.out.print("[ ");
+		// for (Integer i : genes) {
+		// System.out.print(i + " ");
+		// }
+		// System.out.println("] ");
+		boolean copy = false;
+		int oldPos = 0;
 
-		// add a bit of random to the start
-		boolean copy = GeneticAlgorithm.getRandomValues().nextBoolean();
 		// 1 crossover Point in an array with 3 elements seria
 		// 0 - 1 para um deles (logo copia a pos 0) e iria i(0)+3 = 3
 		for (int i = 0; i < size; i += deltaPoint) {
-			// System.out.println("I CROSS: " + i);
 			if (!copy) {
 				copy = true;
-				Main.replaceFrom(chromossomeGenes, c1.getGenes(), i + 1, i + deltaPoint);
-				Main.replaceFrom(genes, c2.getGenes(), i + 1, i + deltaPoint);
+				if (GeneticAlgorithm.getRandomValues().nextInt() % 2 == 0) {
+					Main.replaceFrom(chromossomeGenes, c1.getGenes(), i + 1, i + deltaPoint);
+					Main.replaceFrom(genes, c2.getGenes(), i + 1, i + deltaPoint);
+				} else {
+					Main.replaceFrom(chromossomeGenes, c1.getGenes(), oldPos, i + 1);
+					Main.replaceFrom(genes, c2.getGenes(), oldPos, i + 1);
+				}
 			} else
 				copy = false;
+			oldPos = i;
 
 		}
+		// System.out.print("[ ");
+		// for (Integer i : c1.getGenes()) {
+		// System.out.print(i + " ");
+		// }
+		// System.out.println("] ");
+		// System.out.print("[ ");
+		// for (Integer i : c2.getGenes()) {
+		// System.out.print(i + " ");
+		// }
+		// System.out.println("] ");
+		// System.out.println("END \n");
 		// System.out.println("Ending Cross Overs");
 		return new Chromosome[] { c1, c2 };
 
@@ -236,7 +265,6 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * @return
 	 */
 	public Chromosome crossOver() {
-		// TODO Auto-generated method stub
 		return new Chromosome(examsReference, genes, score, probability);
 	}
 
@@ -263,40 +291,15 @@ public class Chromosome implements Comparable<Chromosome> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((allocatedSlots == null) ? 0 : allocatedSlots.hashCode());
 		result = prime * result + ((examsReference == null) ? 0 : examsReference.hashCode());
 		result = prime * result + ((genes == null) ? 0 : genes.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(probability);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + score;
+		result = prime * result + (int) (score ^ (score >>> 32));
+		result = prime * result + ((season == null) ? 0 : season.hashCode());
 		return result;
-	}
-
-	// TODO doubts about the existence of an equals method
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Chromosome other = (Chromosome) obj;
-		if (examsReference == null) {
-			if (other.examsReference != null)
-				return false;
-		} else if (!examsReference.equals(other.examsReference))
-			return false;
-		if (genes == null) {
-			if (other.genes != null)
-				return false;
-		} else if (!genes.equals(other.genes))
-			return false;
-		if (Double.doubleToLongBits(probability) != Double.doubleToLongBits(other.probability))
-			return false;
-		if (score != other.score)
-			return false;
-		return true;
 	}
 
 	public double getProbability() {
@@ -323,12 +326,17 @@ public class Chromosome implements Comparable<Chromosome> {
 		this.examsReference = examsReference;
 	}
 
-	public int getScore() {
+	public long getScore() {
 		return score;
 	}
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	@Override
+	public String toString() {
+		return "Chromosome [season=" + season + " score: " + score + ", genes=" + genes + "]";
 	}
 
 }

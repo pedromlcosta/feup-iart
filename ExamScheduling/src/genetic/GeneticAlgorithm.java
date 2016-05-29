@@ -1,5 +1,6 @@
 package genetic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import info.Exam;
@@ -110,7 +111,7 @@ public class GeneticAlgorithm {
 	}
 
 	private Chromosome genGenMax(ArrayList<Chromosome> cL) {
-		int scoreMax = -1;
+		long scoreMax = -1;
 		Chromosome best = null;
 		for (Chromosome c : cL) {
 			if (c.getScore() > scoreMax) {
@@ -134,7 +135,8 @@ public class GeneticAlgorithm {
 			chromosome.generate(nrTimeSlots);
 			chromosome.registerTimeSlots(university, season);
 			chromosomes.add(chromosome);
-			// System.out.println("Chromosome " + i + " was generated");
+			System.out.println("Chromosome " + i + " was generated");
+			System.out.println(chromosome);
 		}
 
 	}
@@ -157,13 +159,17 @@ public class GeneticAlgorithm {
 
 		if (numberToCross % 2 != 0)
 			isOdd = true;
-
+		System.out.println(toCross);
 		for (int i = 0; i < numberToCross; i++) {
 			Chromosome chromosome = toCross.get(i);
 			// 0-1 2-3
 			// 0-1 2-3 4
 			if (i < numberToCross - 1) {
 				Chromosome chromossome2 = toCross.get(i + 1);
+				System.out.println("To cross");
+				System.out.println(chromosome);
+				System.out.println(chromossome2);
+				System.in.read();
 				Chromosome[] newChromosome = chromosome.crossOver(chromossome2, crossOverPoints);
 				// add the newly created Chromosomes
 				newGeneration.add(newChromosome[0]);
@@ -194,6 +200,7 @@ public class GeneticAlgorithm {
 			for (int j = 0; j < size; j++) {
 
 				Chromosome chromosome = currentGeneration.get(j);
+				System.out.println(chromosome);
 				value -= chromosome.getScore();
 				if (value <= 0) {
 					toCross.add(chromosome);
@@ -202,6 +209,17 @@ public class GeneticAlgorithm {
 			}
 			if (toCross.size() == numberToCross)
 				break;
+
+			if (i == probs.length - 1 && toCross.size() < numberToCross) {
+				// reset probs and i
+				probs = generateNRandomNumbers(numberToCross);
+				i = -1;
+			}
+			try {
+				System.in.read();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println("Selection End");
 		return toCross;
@@ -224,12 +242,11 @@ public class GeneticAlgorithm {
 	private int evaluateChromosomes(ArrayList<Chromosome> toEvaluate) {
 		int sum = 0;
 		for (int i = 0; i < toEvaluate.size(); i++) {
-			if (i == 1) {
-				// System.out.println(toEvaluate.get(i).getGenes());
-				toEvaluate.get(i).evaluate(university);
-				sum += toEvaluate.get(i).getScore();
-			}
+			// System.out.println(toEvaluate.get(i).getGenes());
+			toEvaluate.get(i).evaluate(university);
+			sum += toEvaluate.get(i).getScore();
 		}
+
 		for (Chromosome chromossome : toEvaluate) {
 			chromossome.setProbability(chromossome.getScore() / (1.0 * sum) * 1.0);
 		}
