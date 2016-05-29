@@ -384,7 +384,8 @@ public class University implements Serializable {
 		ArrayList<Exam> exams = new ArrayList<Exam>();
 		for(Exam tmp:listExams){
 			Exam e = new Exam(tmp.getName(),tmp.getYear());
-			e.setTimeslot(new TimeSlot((Calendar)tmp.getTimeslot().getCalendar().clone()));
+			if(tmp.getTimeslot() != null)
+				e.setTimeslot(new TimeSlot((Calendar)tmp.getTimeslot().getCalendar().clone()));
 			exams.add(e);
 		}
 		

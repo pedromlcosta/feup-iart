@@ -35,6 +35,9 @@ public class SimulatedAnnealing {
 
 	public Individual search(Season season){
 		
+		if(university.getTimeSlots(season).size() == 0)
+			return null;
+		
 		Individual.setChangeProb(0.30);
 		Individual.setPremuteProb(0.30);
 		
@@ -49,8 +52,6 @@ public class SimulatedAnnealing {
 			newCost = newSolution.getValue(university,season);
 			
 			long deltaCost = newCost - oldCost;
-			System.out.println("Delta"+ deltaCost);
-			System.out.println("Accept" + acceptNeighbour(deltaCost));
 			
 			if(deltaCost > 0 || acceptNeighbour(deltaCost)){
 				currentSolution = newSolution;

@@ -102,6 +102,8 @@ public class ShowEntities extends JPanel implements ActionListener {
 	public void setup() {
 		
 		ArrayList<Exam> exams = manager.getUniversity().getResult(getActiveSeason());
+		if(exams.size() == 0)
+			return;
 		beginMonday = manager.getMonday(exams.get(0));
 		endMonday = manager.getMonday(exams.get(exams.size() - 1));
 		

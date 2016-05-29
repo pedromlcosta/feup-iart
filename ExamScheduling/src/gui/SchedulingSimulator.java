@@ -60,7 +60,6 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 		}
 		else if(e.getSource() == btnSimulatedAnnealing){
 			SimulatedAnnealing sa = new SimulatedAnnealing(manager.getUniversity());
-			System.out.println("Before running sa");
 			sa.search(Season.NORMAL);
 
 		}
