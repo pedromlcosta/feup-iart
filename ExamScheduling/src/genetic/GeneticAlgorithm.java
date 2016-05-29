@@ -100,12 +100,12 @@ public class GeneticAlgorithm {
 			lastXGenerations.add(chromosomes.get(0));
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
+
 		}
 
 		// CROMOSSOMA ESCOLHIDO
 		Chromosome chosenChromosome = genGenMax(lastXGenerations);
 		// chosenChromosome.registerTimeSlots(season);
-
 		System.out.println("Finished the run");
 	}
 
@@ -225,7 +225,7 @@ public class GeneticAlgorithm {
 		int sum = 0;
 		for (int i = 0; i < toEvaluate.size(); i++) {
 			if (i == 1) {
-				System.out.println(toEvaluate.get(i).getGenes());
+				// System.out.println(toEvaluate.get(i).getGenes());
 				toEvaluate.get(i).evaluate(university);
 				sum += toEvaluate.get(i).getScore();
 			}
