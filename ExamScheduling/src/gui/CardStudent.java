@@ -132,6 +132,7 @@ public class CardStudent extends JPanel implements ActionListener {
 		studentName.setText("");
 		listModel = (DefaultListModel<String>) selectedExams.getModel();
 		listModel.clear();
+		exams.clear();
 	}
 	
 	private void clearTips() {
