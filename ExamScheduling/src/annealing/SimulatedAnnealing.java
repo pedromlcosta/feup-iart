@@ -1,5 +1,7 @@
 package annealing;
 
+import java.util.Random;
+
 import info.Season;
 import info.University;
 
@@ -12,6 +14,7 @@ public class SimulatedAnnealing {
 	private Individual newSolution;
 	private Individual bestSolution;
 	private University university;
+	private Random random;
 	
 	public SimulatedAnnealing(){
 		
@@ -21,6 +24,7 @@ public class SimulatedAnnealing {
 		
 		this.university = university;
 		coolingRate = 0.97;
+		random = new Random();
 	}
 	
 	public SimulatedAnnealing(double coolingRate, University university){
@@ -31,17 +35,27 @@ public class SimulatedAnnealing {
 
 	public Individual search(Season season){
 		
-		int oldCost, newCost, bestCost = 0;
+		Individual.setChangeProb(0.30);
+		Individual.setPremuteProb(0.30);
+		
+		long oldCost, newCost, bestCost = 0;
 		currentSolution = new Individual();
 		currentSolution.generate(university.getTimeSlots(season).size(), university.getExams(season).size());
-		oldCost = currentSolution.getValue();
+		oldCost = currentSolution.getValue(university,season);
 		temperature = 1;
 		
 		while(temperature > T_EPSILON){
 			newSolution = currentSolution.getNeighbour(university,season);
-			newCost = newSolution.getValue();
-			if(Math.random() < acceptNeighbour(oldCost,newCost))
+			newCost = newSolution.getValue(university,season);
+			
+			long deltaCost = newCost - oldCost;
+			System.out.println("Delta"+ deltaCost);
+			System.out.println("Accept" + acceptNeighbour(deltaCost));
+			
+			if(deltaCost > 0 || acceptNeighbour(deltaCost)){
 				currentSolution = newSolution;
+				oldCost = newCost;
+			}
 			
 			temperature *= coolingRate;
 			
@@ -54,8 +68,8 @@ public class SimulatedAnnealing {
 		return bestSolution;
 	}
 	
-	double acceptNeighbour(int oldCost, int newCost){
+	boolean acceptNeighbour(long deltaCost){
 		
-		return Math.exp((newCost-oldCost)/temperature);
+		return random.nextDouble() <= Math.exp((deltaCost)/temperature);
 	}
 }

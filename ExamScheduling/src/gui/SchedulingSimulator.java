@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import annealing.SimulatedAnnealing;
 import net.miginfocom.swing.MigLayout;
 import utilities.Manager;
 
@@ -19,6 +20,7 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 	private Manager manager;
 	private JButton btnGeneticAlgorithm;
 	private JLabel lblGeneticStatus;
+	private JButton btnSimulatedAnnealing;
 	
 	public SchedulingSimulator(Manager manager) {
 		
@@ -36,6 +38,10 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 		
 		lblGeneticStatus = new JLabel("Genetic Response here");
 		add(lblGeneticStatus,"wrap");
+		
+		btnSimulatedAnnealing = new JButton("Start Simulated Annealing Algorithm");
+		btnSimulatedAnnealing.addActionListener(this);
+		add(btnSimulatedAnnealing,"gapleft 20, gaptop 10");
 	}
 	
 	@Override
@@ -51,6 +57,12 @@ public class SchedulingSimulator extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 			lblGeneticStatus.setText("Clicked");
+		}
+		else if(e.getSource() == btnSimulatedAnnealing){
+			SimulatedAnnealing sa = new SimulatedAnnealing(manager.getUniversity());
+			System.out.println("Before running sa");
+			sa.search(Season.NORMAL);
+
 		}
 	}
 }
