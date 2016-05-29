@@ -134,6 +134,7 @@ public class GeneticAlgorithm {
 			Chromosome chromosome = new Chromosome(exams);
 			chromosome.generate(nrTimeSlots);
 			chromosome.registerTimeSlots(university, season);
+			
 			chromosomes.add(chromosome);
 			System.out.println("Chromosome " + i + " was generated");
 			System.out.println(chromosome);
@@ -159,17 +160,17 @@ public class GeneticAlgorithm {
 
 		if (numberToCross % 2 != 0)
 			isOdd = true;
-		System.out.println(toCross);
+		//System.out.println(toCross);
 		for (int i = 0; i < numberToCross; i++) {
 			Chromosome chromosome = toCross.get(i);
 			// 0-1 2-3
 			// 0-1 2-3 4
 			if (i < numberToCross - 1) {
 				Chromosome chromossome2 = toCross.get(i + 1);
-				System.out.println("To cross");
-				System.out.println(chromosome);
-				System.out.println(chromossome2);
-				System.in.read();
+				//System.out.println("To cross");
+				//System.out.println(chromosome);
+				//System.out.println(chromossome2);
+				//System.in.read();
 				Chromosome[] newChromosome = chromosome.crossOver(chromossome2, crossOverPoints);
 				// add the newly created Chromosomes
 				newGeneration.add(newChromosome[0]);
@@ -190,7 +191,7 @@ public class GeneticAlgorithm {
 	 * @return
 	 */
 	public ArrayList<Chromosome> selection(ArrayList<Chromosome> currentGeneration, int numberToCross) {
-		System.out.println("Selection Start: " + numberToCross);
+		//System.out.println("Selection Start: " + numberToCross);
 		int size = currentGeneration.size();
 		double probs[] = generateNRandomNumbers(numberToCross);
 		ArrayList<Chromosome> toCross = new ArrayList<Chromosome>();
@@ -200,7 +201,7 @@ public class GeneticAlgorithm {
 			for (int j = 0; j < size; j++) {
 
 				Chromosome chromosome = currentGeneration.get(j);
-				System.out.println(chromosome);
+				//System.out.println(chromosome);
 				value -= chromosome.getScore();
 				if (value <= 0) {
 					toCross.add(chromosome);
@@ -215,13 +216,8 @@ public class GeneticAlgorithm {
 				probs = generateNRandomNumbers(numberToCross);
 				i = -1;
 			}
-			try {
-				System.in.read();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
-		System.out.println("Selection End");
+		//System.out.println("Selection End");
 		return toCross;
 	}
 

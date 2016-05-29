@@ -17,7 +17,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	// For 5 exams, there'll be 5 genes, each is a number, each number is a slot
 	// allocated
 	// to the corresponding exam
-
+	University university;
 	Season season;
 	private ArrayList<Exam> examsReference;
 	private ArrayList<TimeSlot> allocatedSlots = new ArrayList<TimeSlot>();
@@ -35,7 +35,9 @@ public class Chromosome implements Comparable<Chromosome> {
 
 		int splitSeasonCount = university.getExams(Season.NORMAL).size();
 
-		System.out.println(genes);
+		System.out.println("Genes: " + genes);
+		System.out.println("Allocated Slots:" + allocatedSlots);
+		System.out.println("");
 
 		for (int i = 0; i < examsReference.size(); i++) {
 			System.out.println("Exam:" + examsReference.get(i).getName());
@@ -85,9 +87,10 @@ public class Chromosome implements Comparable<Chromosome> {
 		ArrayList<TimeSlot> allocatedSorted = new ArrayList<TimeSlot>(allocatedSlots);
 
 		// System.out.println("These genes correspond to the times: ");
-		for (int i = 0; i < allocatedSorted.size(); i++) {
-			System.out.println(allocatedSorted.get(i).toString());
-		}
+		/*
+		 * for (int i = 0; i < allocatedSorted.size(); i++) {
+		 * System.out.println(allocatedSorted.get(i).toString()); }
+		 */
 
 		allocatedSorted.sort(null);
 
@@ -101,7 +104,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		}
 
 		score = scoreFirstParcel + scoreSecondParcel;
-		//System.out.println(score);
+		// System.out.println(score);
 
 		// System.out.println("First parcel: " + scoreFirstParcel);
 		// System.out.println("Second parcel: " + scoreSecondParcel);
@@ -110,12 +113,15 @@ public class Chromosome implements Comparable<Chromosome> {
 
 	public void registerTimeSlots(University university, Season season) {
 
+		this.university = university;
 		this.season = season;
 
 		allocatedSlots.clear();
 		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);
-
+		System.out.println("Register function genes: " + genes);
+		System.out.println("Register function slots: " + seasonTimeslots);
 		for (int i = 0; i < genes.size(); i++) {
+
 			TimeSlot ts = seasonTimeslots.get(genes.get(i));
 			allocatedSlots.add(ts);
 		}
@@ -255,6 +261,10 @@ public class Chromosome implements Comparable<Chromosome> {
 		// System.out.println("] ");
 		// System.out.println("END \n");
 		// System.out.println("Ending Cross Overs");
+
+		c1.registerTimeSlots(university, season);
+		c2.registerTimeSlots(university, season);
+
 		return new Chromosome[] { c1, c2 };
 
 	}
@@ -269,8 +279,8 @@ public class Chromosome implements Comparable<Chromosome> {
 	}
 
 	public void mutate(Random seed, double mutationProb) {
-		int size = genes.size();
-		int limit = size + 1;
+		int size = university.getTimeSlots(season).size();
+		int limit = size;
 		for (int index = 0; index < size; index++) {
 			if (seed.nextDouble() <= mutationProb) {
 				genes.set(index, seed.nextInt(limit));
