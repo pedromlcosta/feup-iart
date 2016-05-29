@@ -38,7 +38,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		// System.out.println("");
 
 		for (int i = 0; i < examsReference.size(); i++) {
-		//	System.out.println("Exam:" + examsReference.get(i).getName());
+			System.out.println("Exam:" + examsReference.get(i).getName());
 
 			Exam exam = examsReference.get(i);
 
@@ -116,8 +116,8 @@ public class Chromosome implements Comparable<Chromosome> {
 
 		allocatedSlots.clear();
 		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);
-		//System.out.println("Register function genes: " + genes);
-		//System.out.println("Register function slots: " + seasonTimeslots);
+		// System.out.println("Register function genes: " + genes);
+		// System.out.println("Register function slots: " + seasonTimeslots);
 		for (int i = 0; i < genes.size(); i++) {
 
 			TimeSlot ts = seasonTimeslots.get(genes.get(i));
@@ -267,6 +267,19 @@ public class Chromosome implements Comparable<Chromosome> {
 
 	}
 
+	public boolean allocateTimeSlotsToExams() {
+		int exameSize;
+
+		if ((exameSize = examsReference.size()) != allocatedSlots.size())
+			return false;
+
+		for (int i = 0; i < exameSize; i++) {
+			examsReference.get(i).setTimeslot(allocatedSlots.get(i));
+		}
+
+		return true;
+	}
+
 	/**
 	 * When there is only 1 available (
 	 * 
@@ -345,6 +358,16 @@ public class Chromosome implements Comparable<Chromosome> {
 	@Override
 	public String toString() {
 		return "Chromosome [season=" + season + " score: " + score + ", genes=" + genes + "]";
+	}
+
+	public void printTimeSlots() {
+		int size = allocatedSlots.size();
+		for (int index = 0; index < size; index++) {
+			TimeSlot ts = allocatedSlots.get(index);
+			Exam e = examsReference.get(index);
+			System.out.println("Exam: " + e.getName() + " Has TimeSlot: " + ts);
+		}
+
 	}
 
 }

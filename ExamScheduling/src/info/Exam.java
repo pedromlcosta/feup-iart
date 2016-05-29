@@ -15,7 +15,6 @@ public class Exam implements Serializable {
 	private HashMap<Integer,Integer> commonStudents;
 	private ArrayList<Student> students;
 	private int year;
-	
 	private transient TimeSlot ts;
 	
 	public Exam(String name, int year){

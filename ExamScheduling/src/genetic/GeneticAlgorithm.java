@@ -1,6 +1,5 @@
 package genetic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import info.Exam;
@@ -14,10 +13,9 @@ public class GeneticAlgorithm {
 	// TODO: POR VALORES AJUSTADOS
 	private static final double CROSSOVER_DEFAULT = 0.65;
 	private static final double MUTATION_DEFAULT_PROB = 0.25;
-	private static final int MINIMUM_LVL_GOOD_SOLUTION = 152;
 	private static final int UNCHANGED_GENERATION_LIMIT = 5;
 	private static final double DIFF_LIMIT = 0.001;
-
+	private static final int MIN_GENERATIONS_RUN = 5;
 	private University university;
 	private Season season = null;
 	private ArrayList<Chromosome> chromosomes;
@@ -68,11 +66,13 @@ public class GeneticAlgorithm {
 		lastXGenerations = new ArrayList<Chromosome>();
 
 		generateChromosomes(nrChromosomes);
-
+		System.out.println(chromosomes);
 		sumOfEvaluations = evaluateChromosomes(chromosomes);
-
+		int generationsCreated = 0;
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
-		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT && sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
+		
+		while (generationsCreated < MIN_GENERATIONS_RUN && generationUnchanged < UNCHANGED_GENERATION_LIMIT) {
+			
 			int newGenerationSum = 0;
 
 			chromosomes.sort(null);
@@ -101,15 +101,25 @@ public class GeneticAlgorithm {
 			// a pos chromosomes.size()-1 é a melhor da geração logo escolhemos
 			// o melhor da geração
 			lastXGenerations.add(chromosomes.get(chromosomes.size() - 1));
+			System.out.println("lastXGenerations: " + lastXGenerations.size());
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
-
+			generationsCreated++;
 		}
+
 		System.out.println(sumOfEvaluations);
 		// CROMOSSOMA ESCOLHIDO
-		Chromosome chosenChromosome = genGenMax(lastXGenerations);
+		Chromosome chosenChromosome = null;
+		if (lastXGenerations.isEmpty())
+			chosenChromosome = genGenMax(chromosomes);
+		else
+			chosenChromosome = genGenMax(lastXGenerations);
+
+		chosenChromosome.allocateTimeSlotsToExams();
 		// chosenChromosome.registerTimeSlots(season);
 		System.out.println("Finished the run");
+
+		chosenChromosome.printTimeSlots();
 	}
 
 	private Chromosome genGenMax(ArrayList<Chromosome> cL) {
@@ -305,11 +315,7 @@ public class GeneticAlgorithm {
 	public void setCrossOverProb(double crossOverProb) {
 		this.crossOverProb = crossOverProb;
 	}
-
-	public static int getMinimumLvlGoodSolution() {
-		return MINIMUM_LVL_GOOD_SOLUTION;
-	}
-
+ 
 	public static int getUnchangedGenerationLimit() {
 		return UNCHANGED_GENERATION_LIMIT;
 	}
