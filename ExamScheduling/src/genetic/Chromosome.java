@@ -1,8 +1,6 @@
 package genetic;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -35,12 +33,12 @@ public class Chromosome implements Comparable<Chromosome> {
 
 		int splitSeasonCount = university.getExams(Season.NORMAL).size();
 
-		System.out.println("Genes: " + genes);
-		System.out.println("Allocated Slots:" + allocatedSlots);
-		System.out.println("");
+		// System.out.println("Genes: " + genes);
+		// System.out.println("Allocated Slots:" + allocatedSlots);
+		// System.out.println("");
 
 		for (int i = 0; i < examsReference.size(); i++) {
-			System.out.println("Exam:" + examsReference.get(i).getName());
+		//	System.out.println("Exam:" + examsReference.get(i).getName());
 
 			Exam exam = examsReference.get(i);
 
@@ -118,8 +116,8 @@ public class Chromosome implements Comparable<Chromosome> {
 
 		allocatedSlots.clear();
 		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);
-		System.out.println("Register function genes: " + genes);
-		System.out.println("Register function slots: " + seasonTimeslots);
+		//System.out.println("Register function genes: " + genes);
+		//System.out.println("Register function slots: " + seasonTimeslots);
 		for (int i = 0; i < genes.size(); i++) {
 
 			TimeSlot ts = seasonTimeslots.get(genes.get(i));

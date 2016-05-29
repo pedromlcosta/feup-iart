@@ -72,12 +72,13 @@ public class GeneticAlgorithm {
 		sumOfEvaluations = evaluateChromosomes(chromosomes);
 
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
-		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations > MINIMUM_LVL_GOOD_SOLUTION) {
+		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT && sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
 
 			chromosomes.sort(null);
-
+			System.out.println(chromosomes);
 			ArrayList<Chromosome> newGeneration = new ArrayList<Chromosome>();
+
 			elitistChoice(newGeneration);
 
 			crossOver(chromosomes, newGeneration, numberOfNonElitistChromosomes);
@@ -97,13 +98,14 @@ public class GeneticAlgorithm {
 				lastXGenerations.remove(lastXGenerations.size() - 1);
 
 			}
-			// a pos 0 é a melhor da geração logo escolhemos o melhor da geração
-			lastXGenerations.add(chromosomes.get(0));
+			// a pos chromosomes.size()-1 é a melhor da geração logo escolhemos
+			// o melhor da geração
+			lastXGenerations.add(chromosomes.get(chromosomes.size() - 1));
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
 
 		}
-
+		System.out.println(sumOfEvaluations);
 		// CROMOSSOMA ESCOLHIDO
 		Chromosome chosenChromosome = genGenMax(lastXGenerations);
 		// chosenChromosome.registerTimeSlots(season);
@@ -134,10 +136,10 @@ public class GeneticAlgorithm {
 			Chromosome chromosome = new Chromosome(exams);
 			chromosome.generate(nrTimeSlots);
 			chromosome.registerTimeSlots(university, season);
-			
+
 			chromosomes.add(chromosome);
-			System.out.println("Chromosome " + i + " was generated");
-			System.out.println(chromosome);
+			// System.out.println("Chromosome " + i + " was generated");
+			// System.out.println(chromosome);
 		}
 
 	}
@@ -160,17 +162,17 @@ public class GeneticAlgorithm {
 
 		if (numberToCross % 2 != 0)
 			isOdd = true;
-		//System.out.println(toCross);
+		// System.out.println(toCross);
 		for (int i = 0; i < numberToCross; i++) {
 			Chromosome chromosome = toCross.get(i);
 			// 0-1 2-3
 			// 0-1 2-3 4
 			if (i < numberToCross - 1) {
 				Chromosome chromossome2 = toCross.get(i + 1);
-				//System.out.println("To cross");
-				//System.out.println(chromosome);
-				//System.out.println(chromossome2);
-				//System.in.read();
+				// System.out.println("To cross");
+				// System.out.println(chromosome);
+				// System.out.println(chromossome2);
+				// System.in.read();
 				Chromosome[] newChromosome = chromosome.crossOver(chromossome2, crossOverPoints);
 				// add the newly created Chromosomes
 				newGeneration.add(newChromosome[0]);
@@ -191,7 +193,7 @@ public class GeneticAlgorithm {
 	 * @return
 	 */
 	public ArrayList<Chromosome> selection(ArrayList<Chromosome> currentGeneration, int numberToCross) {
-		//System.out.println("Selection Start: " + numberToCross);
+		// System.out.println("Selection Start: " + numberToCross);
 		int size = currentGeneration.size();
 		double probs[] = generateNRandomNumbers(numberToCross);
 		ArrayList<Chromosome> toCross = new ArrayList<Chromosome>();
@@ -201,7 +203,7 @@ public class GeneticAlgorithm {
 			for (int j = 0; j < size; j++) {
 
 				Chromosome chromosome = currentGeneration.get(j);
-				//System.out.println(chromosome);
+				// System.out.println(chromosome);
 				value -= chromosome.getScore();
 				if (value <= 0) {
 					toCross.add(chromosome);
@@ -217,7 +219,7 @@ public class GeneticAlgorithm {
 				i = -1;
 			}
 		}
-		//System.out.println("Selection End");
+		// System.out.println("Selection End");
 		return toCross;
 	}
 
@@ -230,8 +232,11 @@ public class GeneticAlgorithm {
 	}
 
 	private void elitistChoice(ArrayList<Chromosome> newGeneration) {
-		for (int i = 0; i < elitistPicks; i++) {
+		int size = chromosomes.size();
+		for (int i = size - 1; i >= 0; i--) {
 			newGeneration.add(chromosomes.get(i));
+			if (newGeneration.size() >= elitistPicks)
+				return;
 		}
 	}
 
