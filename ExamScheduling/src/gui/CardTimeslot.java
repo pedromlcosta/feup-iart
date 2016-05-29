@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
@@ -26,7 +27,7 @@ import org.jdatepicker.impl.UtilDateModel;
 import net.miginfocom.swing.MigLayout;
 import utilities.Manager;
 
-public class CardTimeslot extends CardPanel implements ActionListener {
+public class CardTimeslot extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private Manager manager;
@@ -234,11 +235,5 @@ public class CardTimeslot extends CardPanel implements ActionListener {
 		lblnbTimeslotsTip.setText("");
 		lblBeginTimeTip.setText("");
 		lblEndTimeTip.setText("");
-	}
-	
-	@Override
-	public void setup() {
-		
-		//empty setup
 	}
 }

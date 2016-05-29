@@ -73,4 +73,9 @@ public class Exam implements Serializable {
 		
 		students.add(student);
 	}
+
+	public void setTimeslot(TimeSlot timeSlot) {
+		
+		this.ts = timeSlot;
+	}
 }

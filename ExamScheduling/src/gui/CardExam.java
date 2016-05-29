@@ -9,6 +9,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -17,7 +18,7 @@ import javax.swing.SpinnerListModel;
 import net.miginfocom.swing.MigLayout;
 import utilities.Manager;
 
-public class CardExam extends CardPanel implements ActionListener {
+public class CardExam extends JPanel implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -132,10 +133,5 @@ public class CardExam extends CardPanel implements ActionListener {
 		
 		lblExamNameTip.setText("");
 		lblExamYearTip.setText("");
-	}
-
-	@Override
-	public void setup() {
-		
 	}
 }

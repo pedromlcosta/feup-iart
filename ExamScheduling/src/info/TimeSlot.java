@@ -20,7 +20,6 @@ public class TimeSlot implements Serializable, Comparable<TimeSlot> {
 	public TimeSlot(int year, int month, int day, int hour, int minute) {
 
 		calendar = Calendar.getInstance();
-		calendar.set(year, month, day);
 		calendar.set(year, month, day, hour, minute, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 	}
@@ -76,5 +75,4 @@ public class TimeSlot implements Serializable, Comparable<TimeSlot> {
 	public void setCalendar(Calendar calendar) {
 		this.calendar = calendar;
 	}
-
 }
