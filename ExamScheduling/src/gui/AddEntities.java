@@ -35,15 +35,15 @@ public class AddEntities extends JPanel implements ActionListener, ItemListener 
 	private CardExam cardExam;
 	private CardStudent cardStudent;
 	private CardTimeslot cardTimeslot;
-	private HashMap<String,CardPanel> cardsPanels;
-	private CardPanel currentCard;
+	private HashMap<String,JPanel> cardsPanels;
+	private JPanel currentCard;
 	
 	public AddEntities(Manager manager){
 		
 		this.currentCard = null;
 		this.manager = manager;
 		this.fChooser = new JFileChooser();
-		this.cardsPanels = new HashMap<String,CardPanel>();
+		this.cardsPanels = new HashMap<String,JPanel>();
 		initialize();
 	}
 
@@ -90,7 +90,6 @@ public class AddEntities extends JPanel implements ActionListener, ItemListener 
 		cardExam = new CardExam(manager);
 		cardStudent = new CardStudent(manager);
 		cardTimeslot = new CardTimeslot(manager);
-		setupCardTimeslot();
 		
 		cards = new JPanel(new CardLayout());
 	    cards.add(new JPanel(),entities[0]);
@@ -114,11 +113,6 @@ public class AddEntities extends JPanel implements ActionListener, ItemListener 
 		lblSaveStatus = new JLabel("Save Status");
 		add(lblSaveStatus, "alignx left");
 	}
-	
-	private void setupCardTimeslot() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -130,8 +124,8 @@ public class AddEntities extends JPanel implements ActionListener, ItemListener 
 					textCurrentName.setText(manager.getCurrentFile());
 					lblLoadStatus.setText("Load successful");
 					lblLoadStatus.setForeground(Color.GREEN.darker());
-					if(currentCard != null)
-						currentCard.setup();
+					if(currentCard == cardStudent)
+						cardStudent.setup();
 				}
 				else{
 					textCurrentName.setText("");
@@ -166,10 +160,9 @@ public class AddEntities extends JPanel implements ActionListener, ItemListener 
 			CardLayout cl = (CardLayout)(cards.getLayout());
 			String item = (String)e.getItem();
 			cl.show(cards, item);
-			if(item != "Select:"){
-				 currentCard = (CardPanel)cardsPanels.get(item);
-				 currentCard.setup();
-			}
+			currentCard = (JPanel)cardsPanels.get(item);
+			if(item.equals("Student"))
+				cardStudent.setup();
 		}
 	}
 }

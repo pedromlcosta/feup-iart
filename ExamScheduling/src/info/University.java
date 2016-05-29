@@ -116,7 +116,7 @@ public class University implements Serializable {
 		if(timeArgs.length != 2)
 			throw new IllegalArgumentException("Couldn't add a timeslot, time format invalid");
 		
-		TimeSlot ts = new TimeSlot(Integer.parseInt(dateArgs[0]),Integer.parseInt(dateArgs[1]),Integer.parseInt(dateArgs[2]),
+		TimeSlot ts = new TimeSlot(Integer.parseInt(dateArgs[0]),Integer.parseInt(dateArgs[1]) - 1,Integer.parseInt(dateArgs[2]),
 				Integer.parseInt(timeArgs[0]), Integer.parseInt(timeArgs[1]));
 		ArrayList<TimeSlot> seasonTimeslots = timeslots.get(season);
 		if(seasonTimeslots != null)
@@ -321,15 +321,59 @@ public class University implements Serializable {
 	public ArrayList<Calendar> getTS(Calendar bDate, Calendar eDate, boolean weekendFlag) {
 		
 		ArrayList<Calendar> ts = new ArrayList<Calendar>();
+		Calendar itDate = (Calendar) bDate.clone();
 		
-		while(!equals(bDate,eDate)){
-			if(!blockDate(bDate,weekendFlag))
-				ts.add((Calendar)bDate.clone());
-			bDate.add(Calendar.DATE,1);
+		while(!equals(itDate,eDate)){
+			if(!blockDate(itDate,weekendFlag))
+				ts.add((Calendar)itDate.clone());
+			itDate.add(Calendar.DATE,1);
 		}
 		ts.add(eDate);
 		
 		return ts;
 	}
+	
+	public ArrayList<Exam> getResult(Season season){
+		
+		//return exams.get(season) sorted;
+		return debug();
+	}
+	
+	private ArrayList<Exam> debug(){
+		
+		ArrayList<Exam> exams = new ArrayList<Exam>();
+		Exam exam1 = new Exam("Algebra",1);
+		exam1.setTimeslot(new TimeSlot(2016,8,3,8,0));
+		Exam exam2 = new Exam("Geometry",1);
+		exam2.setTimeslot(new TimeSlot(2016,8,5,9,0));
+		Exam exam3 = new Exam("Logic",1);
+		exam3.setTimeslot(new TimeSlot(2016,8,5,9,0));
+		Exam exam4 = new Exam("Set",1);
+		exam4.setTimeslot(new TimeSlot(2016,8,7,9,0));
+		Exam exam5 = new Exam("Plus",1);
+		exam5.setTimeslot(new TimeSlot(2016,8,14,9,0));
+		Exam exam6 = new Exam("Div",1);
+		exam6.setTimeslot(new TimeSlot(2016,8,15,9,0));
+		Exam exam7 = new Exam("Less",1);
+		exam7.setTimeslot(new TimeSlot(2016,8,22,14,0));
+		Exam exam8 = new Exam("Mult",1);
+		exam8.setTimeslot(new TimeSlot(2016,8,28,14,0));
+		
+		exams.add(exam1);
+		exams.add(exam2);
+		exams.add(exam3);
+		exams.add(exam4);
+		exams.add(exam5);
+		exams.add(exam5);
+		exams.add(exam6);
+		exams.add(exam7);
+		exams.add(exam8);
+		
+		return exams;
+	}
 
+	public String format(Exam exam) {
+		
+		return exam.getName() + " (" + exam.getYear() + ")";
+	}
 }

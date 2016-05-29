@@ -20,7 +20,6 @@ public class TimeSlot implements Serializable {
 	public TimeSlot(int year, int month, int day, int hour, int minute) {
 		
 		calendar = Calendar.getInstance();
-		calendar.set(year, month, day);
 		calendar.set(year, month, day, hour, minute, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
 	}
@@ -63,4 +62,9 @@ public class TimeSlot implements Serializable {
         
 		return TimeUnit.MILLISECONDS.toMinutes(calendar.getTimeInMillis() - ts.calendar.getTimeInMillis());
     }
+
+	public Calendar getCalendar() {
+		
+		return calendar;
+	}
 }

@@ -1,5 +1,6 @@
 package utilities;
 
+import info.Exam;
 import info.University;
 
 import java.awt.Color;
@@ -33,6 +34,7 @@ public class Manager {
 	private BufferedWriter textSave;
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
+	private String[] months;
 	
 	private University university;
 	private ArrayList<String> exams;
@@ -43,6 +45,7 @@ public class Manager {
 		this.currentFile = new String();
 		this.university = new University();
 		this.exams = new ArrayList<String>();
+		this.months = new String[]{"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 		Locale.setDefault(Locale.ENGLISH);
 	}
 	
@@ -268,6 +271,11 @@ public class Manager {
 		
 		return list.toArray(new String[0]);
 	}
+	
+	public int timeIndex(int hour, int minutes){
+		
+		return (hour*60+minutes)/30;
+	}
 
 	public long minutesElapsed(String timeStr){
 		
@@ -341,4 +349,28 @@ public class Manager {
 		
 		return true;
 	}
+
+	public Calendar getMonday(Exam exam) {
+		
+		Calendar tmp = (Calendar) exam.getTimeslot().getCalendar().clone();
+		while (tmp.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+			tmp.add(Calendar.DATE, -1);
+		
+		return tmp;
+		
+	}
+	
+	public String format(Calendar calendar){
+		
+		return calendar.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()) + ", " + months[calendar.get(Calendar.MONTH)] + " " +
+				String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+	}
+
+	public String formatComplete(Calendar calendar) {
+		
+		return calendar.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()) + ", " +calendar.get(Calendar.YEAR) + " " +
+		calendar.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault()) + " " +
+				String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+	}
+
 }
