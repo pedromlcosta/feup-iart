@@ -7,7 +7,7 @@ import java.util.HashMap;
 import info.Student;
 import info.TimeSlot;
 
-public class Exam implements Serializable {
+public class Exam implements Serializable, Comparable<Exam> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -15,6 +15,7 @@ public class Exam implements Serializable {
 	private HashMap<Integer,Integer> commonStudents;
 	private ArrayList<Student> students;
 	private int year;
+	
 	private transient TimeSlot ts;
 	
 	public Exam(String name, int year){
@@ -76,5 +77,10 @@ public class Exam implements Serializable {
 	public void setTimeslot(TimeSlot timeSlot) {
 		
 		this.ts = timeSlot;
+	}
+
+	@Override
+	public int compareTo(Exam exam) {
+		return ts.compareTo(exam.ts);
 	}
 }

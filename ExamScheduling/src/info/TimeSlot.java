@@ -8,7 +8,7 @@ public class TimeSlot implements Serializable, Comparable<TimeSlot> {
 
 	private static final long serialVersionUID = 1L;
 
-	Calendar calendar;
+	private Calendar calendar;
 
 	// TODO: POR HORAS ... DEFINIR NO GUI
 

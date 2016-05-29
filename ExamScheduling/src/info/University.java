@@ -3,6 +3,7 @@ package info;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 
 import info.Season;
@@ -335,21 +336,22 @@ public class University implements Serializable {
 	
 	public ArrayList<Exam> getResult(Season season){
 		
-		//return exams.get(season) sorted;
-		return debug();
+		ArrayList<Exam> examsSorted = cloneExams(exams.get(season));
+		Collections.sort(examsSorted, (e1, e2) -> e1.compareTo(e2));
+		return examsSorted;
 	}
 	
 	private ArrayList<Exam> debug(){
-		
+			
 		ArrayList<Exam> exams = new ArrayList<Exam>();
 		Exam exam1 = new Exam("Algebra",1);
-		exam1.setTimeslot(new TimeSlot(2016,8,3,8,0));
+		exam1.setTimeslot(new TimeSlot(2016,8,8,8,0));
 		Exam exam2 = new Exam("Geometry",1);
-		exam2.setTimeslot(new TimeSlot(2016,8,5,9,0));
+		exam2.setTimeslot(new TimeSlot(2016,8,6,9,0));
 		Exam exam3 = new Exam("Logic",1);
 		exam3.setTimeslot(new TimeSlot(2016,8,5,9,0));
 		Exam exam4 = new Exam("Set",1);
-		exam4.setTimeslot(new TimeSlot(2016,8,7,9,0));
+		exam4.setTimeslot(new TimeSlot(2016,8,7,16,0));
 		Exam exam5 = new Exam("Plus",1);
 		exam5.setTimeslot(new TimeSlot(2016,8,14,9,0));
 		Exam exam6 = new Exam("Div",1);
@@ -375,5 +377,17 @@ public class University implements Serializable {
 	public String format(Exam exam) {
 		
 		return exam.getName() + " (" + exam.getYear() + ")";
+	}
+	
+	public ArrayList<Exam> cloneExams(ArrayList<Exam> listExams){
+		
+		ArrayList<Exam> exams = new ArrayList<Exam>();
+		for(Exam tmp:listExams){
+			Exam e = new Exam(tmp.getName(),tmp.getYear());
+			e.setTimeslot(new TimeSlot((Calendar)tmp.getTimeslot().getCalendar().clone()));
+			exams.add(e);
+		}
+		
+		return exams;
 	}
 }
