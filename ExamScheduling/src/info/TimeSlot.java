@@ -26,7 +26,7 @@ public class TimeSlot implements Serializable, Comparable<TimeSlot> {
 	}
 
 	public String toString() {
-		return calendar.toString();
+		return calendar.getTime().toString();
 	}
 
 	public int getYear() {

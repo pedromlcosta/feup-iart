@@ -15,7 +15,7 @@ public class GeneticAlgorithm {
 
 	// TODO: POR VALORES AJUSTADOS
 	private static final double CROSSOVER_DEFAULT = 0.65;
-	private static final double MUTATION_DEFAULT_PROB = 0.0001;
+	private static final double MUTATION_DEFAULT_PROB = 0.5;
 	private static final int MINIMUM_LVL_GOOD_SOLUTION = 152;
 	private static final int UNCHANGED_GENERATION_LIMIT = 5;
 	private static final double DIFF_LIMIT = 0.001;
@@ -76,9 +76,10 @@ public class GeneticAlgorithm {
 		lastXGenerations = new ArrayList<Chromosome>();
 
 		generateChromosomes(nrChromosomes);
-
+		
 		sumOfEvaluations = evaluateChromosomes(chromosomes);
-
+		/*
+		
 		int numberOfNonElitistChromosomes = chromosomes.size() - elitistPicks;
 		while (generationUnchanged < UNCHANGED_GENERATION_LIMIT || sumOfEvaluations < MINIMUM_LVL_GOOD_SOLUTION) {
 			int newGenerationSum = 0;
@@ -88,7 +89,7 @@ public class GeneticAlgorithm {
 			ArrayList<Chromosome> newGeneration = new ArrayList<Chromosome>();
 			elitistChoice(newGeneration);
 
-			crossOver(chromosomes, newGeneration, numberOfNonElitistChromosomes);
+			//crossOver(chromosomes, newGeneration, numberOfNonElitistChromosomes);
 
 			mutate(newGeneration);
 
@@ -109,12 +110,13 @@ public class GeneticAlgorithm {
 			lastXGenerations.add(chromosomes.get(0));
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
+			
 		}
 
 		// CROMOSSOMA ESCOLHIDO
 		Chromosome chosenChromosome = genGenMax(lastXGenerations);
 		// chosenChromosome.registerTimeSlots(season);
-
+	*/
 		System.out.println("Finished the run");
 	}
 
@@ -147,6 +149,7 @@ public class GeneticAlgorithm {
 		}
 
 	}
+	
 
 	private void mutate(ArrayList<Chromosome> newGeneration) {
 		for (Chromosome chromosome : newGeneration) {
@@ -225,7 +228,7 @@ public class GeneticAlgorithm {
 		int sum = 0;
 		for (int i = 0; i < toEvaluate.size(); i++) {
 			if (i == 1) {
-				System.out.println(toEvaluate.get(i).getGenes());
+				//System.out.println(toEvaluate.get(i).getGenes());
 				toEvaluate.get(i).evaluate(university);
 				sum += toEvaluate.get(i).getScore();
 			}

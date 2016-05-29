@@ -63,11 +63,14 @@ public class Chromosome implements Comparable<Chromosome> {
 			    	sameYearFactor = 1;
 			    }
 			    
+			    System.out.println("Date difference score: " + minuteDifference);
+			    System.out.println("nrCommonStudents: " + nrCommonStudents);
+			    System.out.println("same Year Factor: " + sameYearFactor);
 			    scoreFirstParcel += minuteDifference * nrCommonStudents * sameYearFactor;		    
 			    
 			    
-			    System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + nrCommonStudents  + " students in common with exam " + examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + (key - season.ordinal() * splitSeasonCount));
-			    System.out.println("TimeSlot for exam with keyID " + i + " is " + examDate.toString() + " and the exam in common with keyID " + (key - season.ordinal() * splitSeasonCount) + " has timeslot " + commonExamDate.toString());
+			    //System.out.println("Exam "  + examsReference.get(i).getName() + " with keyID: " + i  +" has " + nrCommonStudents  + " students in common with exam " + examsReference.get(key - season.ordinal() * splitSeasonCount).getName() + " wtih keyID: " + (key - season.ordinal() * splitSeasonCount));
+			    //System.out.println("TimeSlot for exam with keyID " + i + " is " + examDate.toString() + " and the exam in common with keyID " + (key - season.ordinal() * splitSeasonCount) + " has timeslot " + commonExamDate.toString());
 			}
 			
 			
@@ -75,11 +78,19 @@ public class Chromosome implements Comparable<Chromosome> {
 		
 		//2a parcela
 		ArrayList<TimeSlot> allocatedSorted = new ArrayList<TimeSlot>(allocatedSlots);
+		
+		System.out.println("These genes correspond to the times: ");
+		for(int i=0; i < allocatedSorted.size(); i++){
+			System.out.println(allocatedSorted.get(i).toString());
+		}	
+		
 		allocatedSorted.sort(null);
 		
 		long scoreSecondParcel = 0;
 		for(int i=0; i < allocatedSorted.size()-1; i++){
-			scoreSecondParcel += allocatedSorted.get(i).diff(allocatedSorted.get(i+1));
+			long diff = allocatedSorted.get(i).diff(allocatedSorted.get(i+1));
+			//System.out.println("Date " + i + " and " + (i+1) +" difference: " + diff);
+			scoreSecondParcel += diff;
 		}	
 		
 		long totalScore = scoreFirstParcel + scoreSecondParcel;
