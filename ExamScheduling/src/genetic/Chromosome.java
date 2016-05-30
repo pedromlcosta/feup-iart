@@ -10,7 +10,6 @@ import info.Exam;
 import info.Season;
 import info.TimeSlot;
 import info.University;
-import main.Main;
 
 public class Chromosome implements Comparable<Chromosome> {
 
