@@ -10,6 +10,7 @@ import info.Exam;
 import info.Season;
 import info.TimeSlot;
 import info.University;
+import main.Main;
 
 public class Chromosome implements Comparable<Chromosome> {
 
@@ -226,9 +227,6 @@ public class Chromosome implements Comparable<Chromosome> {
 			// Allocated time slot given to exam
 			examsReference.get(i).setTimeslot(allocatedSlots.get(i));
 		}
-		ArrayList<Exam> exams = university.getExams(Season.NORMAL);
-		for (Exam exam : exams)
-			System.out.println(exam.getTimeslot().getCalendar().getTime().toString());
 		return true;
 	}
 
