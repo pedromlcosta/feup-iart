@@ -81,19 +81,20 @@ public class GeneticAlgorithm {
 			copy.sort(null);
 
 			ArrayList<Chromosome> newGeneration = new ArrayList<Chromosome>();
-
 			elitistChoice(newGeneration, copy);
-
 			crossOver(chromosomes, newGeneration, numberOfNonElitistChromosomes);
-
 			mutate(newGeneration);
+
 			newGenerationSum = evaluateChromosomes(newGeneration);
-			newGeneration.sort(null);
+
+			ArrayList<Chromosome> copyNew = new ArrayList<Chromosome>(newGeneration);
+			copyNew.sort(null);
 
 			int size = newGeneration.size();
 
-			long oneSide = newGeneration.get(size - 1).getScore() + newGeneration.get(size - 2).getScore() + newGeneration.get(size - 3).getScore();
-			long secondSide = chromosomes.get(size - 1).getScore() + chromosomes.get(size - 2).getScore() + chromosomes.get(size - 3).getScore();
+			// Top 3
+			long oneSide = copyNew.get(size - 1).getScore() + copyNew.get(size - 2).getScore() + copyNew.get(size - 3).getScore();
+			long secondSide = copy.get(size - 1).getScore() + copy.get(size - 2).getScore() + copy.get(size - 3).getScore();
 			if (Math.abs(oneSide - secondSide) < DIFF_LIMIT)
 				generationUnchanged++;
 			else if (generationUnchanged > 0)
@@ -106,7 +107,7 @@ public class GeneticAlgorithm {
 			}
 			// a pos chromosomes.size()-1 é a melhor da geração logo escolhemos
 			// o melhor da geração
-			lastXGenerations.add(chromosomes.get(chromosomes.size() - 1));
+			lastXGenerations.add(copyNew.get(copyNew.size() - 1));
 
 			chromosomes = newGeneration;
 			sumOfEvaluations = newGenerationSum;
