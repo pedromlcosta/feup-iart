@@ -224,9 +224,12 @@ public class Chromosome implements Comparable<Chromosome> {
 			return false;
 
 		for (int i = 0; i < exameSize; i++) {
+			// Allocated time slot given to exam
 			examsReference.get(i).setTimeslot(allocatedSlots.get(i));
 		}
-
+		ArrayList<Exam> exams = university.getExams(Season.NORMAL);
+		for (Exam exam : exams)
+			System.out.println(exam.getTimeslot().getCalendar().getTime().toString());
 		return true;
 	}
 

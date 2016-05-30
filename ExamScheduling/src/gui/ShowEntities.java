@@ -126,6 +126,9 @@ public class ShowEntities extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		ArrayList<Exam> exams = manager.getUniversity().getResult(getActiveSeason());
+		System.out.println(exams.size());
+		for(Exam exam:exams)
+			System.out.println(exam.getTimeslot().getCalendar().getTime().toString());
 		if(exams == null || exams.size() == 0)
 			return;
 		
