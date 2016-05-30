@@ -63,6 +63,7 @@ public class GeneticAlgorithm {
 		long time = System.currentTimeMillis();
 		// (Re)Initializing variables for this run.
 		this.season = season;
+		this.university.setActiveSchedule(false);
 		generationUnchanged = 0;
 		lastXGenerations = new ArrayList<Chromosome>();
 

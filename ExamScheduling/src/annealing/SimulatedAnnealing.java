@@ -34,6 +34,9 @@ public class SimulatedAnnealing {
 	}
 
 	public Individual search(Season season){
+
+		long time = System.currentTimeMillis();
+		university.setActiveSchedule(false);
 		
 		int nbTimeslots = university.getTimeSlots(season).size();
 		int nbExams = university.getExams(season).size();
@@ -69,6 +72,7 @@ public class SimulatedAnnealing {
 			}
 		}
 		
+		System.out.println("It took: " + (System.currentTimeMillis() - time) + " ms");
 		return bestSolution;
 	}
 	
