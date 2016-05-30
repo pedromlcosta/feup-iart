@@ -35,11 +35,14 @@ public class SimulatedAnnealing {
 
 	public Individual search(Season season){
 		
-		if(university.getTimeSlots(season).size() == 0)
+		int nbTimeslots = university.getTimeSlots(season).size();
+		int nbExams = university.getExams(season).size();
+		
+		if(nbTimeslots == 0 || nbExams == 0)
 			return null;
 		
-		Individual.setChangeProb(0.30);
-		Individual.setPremuteProb(0.30);
+		Individual.setChangeProb(0.50);
+		Individual.setPremuteProb(0.50);
 		
 		long oldCost, newCost, bestCost = 0;
 		currentSolution = new Individual();
@@ -57,10 +60,6 @@ public class SimulatedAnnealing {
 				currentSolution = newSolution;
 				oldCost = newCost;
 			}
-			
-			System.out.println("best cost " + bestCost);
-			System.out.println("old cost "+ oldCost);
-			System.out.println("new cost " + newCost);
 			
 			temperature *= coolingRate;
 			

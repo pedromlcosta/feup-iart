@@ -127,7 +127,7 @@ public class Individual {
 		
 		registerTimeslots(university,season);
 
-		long scoreFirstParcel = 0;
+		double scoreFirstParcel = 0;
 		int sameYearFactor = 2;
 
 		int splitSeasonCount = university.getExams(Season.NORMAL).size();
@@ -143,10 +143,12 @@ public class Individual {
 
 				Integer index = (entry.getKey() - season.ordinal() * splitSeasonCount);
 				Exam commonExam = examsReference.get(index);
-				int nrCommonStudents = entry.getValue();
+				double nrCommonStudents = (double)entry.getValue();
+				if(nrCommonStudents == 0)
+					nrCommonStudents = 0.5;
 
 				TimeSlot commonExamDate = allocatedSlots.get(index);
-				long minuteDifference = examDate.diff(commonExamDate);
+				double minuteDifference = examDate.diff(commonExamDate);
 
 				if (exam.getYear() == commonExam.getYear())
 					sameYearFactor = 2;
@@ -160,17 +162,30 @@ public class Individual {
 
 		// 2a parcela
 		ArrayList<TimeSlot> allocatedSorted = new ArrayList<TimeSlot>(allocatedSlots);
+		ArrayList<Double> diffTimes = new ArrayList<Double>();
 
 		allocatedSorted.sort(null);
 
-		long scoreSecondParcel = 0;
+		double scoreSecondParcel = 0;
+		double sum = 0;
 
 		for (int i = 0; i < allocatedSorted.size() - 1; i++) {
-			long diff = allocatedSorted.get(i).diff(allocatedSorted.get(i + 1));
-			scoreSecondParcel += diff;
+			double diff = allocatedSorted.get(i).diff(allocatedSorted.get(i + 1));
+			diffTimes.add(diff);
+			sum += diff;
 		}
-
-		score = scoreFirstParcel + scoreSecondParcel;
+		
+		double average = sum/diffTimes.size();
+		for (int i=0; i < diffTimes.size(); i++)
+			diffTimes.set(i, Math.pow(diffTimes.get(i) - average,2));
+		
+		sum=0;
+		for(int i=0; i< diffTimes.size();i++)
+			sum += diffTimes.get(i);
+		
+		scoreSecondParcel = Math.sqrt(sum/(diffTimes.size()-1));
+		
+		score = (long)(scoreFirstParcel - scoreSecondParcel);
 	}
 
 	public static void setPremuteProb(double ptp){
@@ -191,7 +206,6 @@ public class Individual {
 		for(int i=0; i < exams.size(); i++)
 			exams.get(i).setTimeslot(allocatedSlots.get(i));
 		
-		System.out.println("Scheduling");
 		university.setActiveSchedule(true);
 	}
 }
