@@ -1,8 +1,10 @@
 package genetic;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 import info.Exam;
 import info.Season;
@@ -33,12 +35,16 @@ public class Chromosome implements Comparable<Chromosome> {
 
 		int splitSeasonCount = university.getExams(Season.NORMAL).size();
 
-		// System.out.println("Genes: " + genes);
-		// System.out.println("Allocated Slots:" + allocatedSlots);
-		// System.out.println("");
+		// If there are more slots than exams and still, the exams land t
+		if (university.getTimeSlots(season).size() > examsReference.size()) {
+			Set<Integer> slotSet = new HashSet<Integer>(genes);
+			if (slotSet.size() < genes.size()) {
+				score = 0;
+				return;
+			}
+		}
 
 		for (int i = 0; i < examsReference.size(); i++) {
-			System.out.println("Exam:" + examsReference.get(i).getName());
 
 			Exam exam = examsReference.get(i);
 
@@ -62,33 +68,25 @@ public class Chromosome implements Comparable<Chromosome> {
 					sameYearFactor = 1;
 				}
 
-				// System.out.println("Date difference score: " +
-				// minuteDifference);
-				// System.out.println("nrCommonStudents: " + nrCommonStudents);
-				// System.out.println("same Year Factor: " + sameYearFactor);
-				scoreFirstParcel += minuteDifference * nrCommonStudents * sameYearFactor;
+				int examsInCommon = examsReference.get(i).getCommonStudents().size();
+				double commonExamsScore = 0;
+				if (examsInCommon == 0) {
+					commonExamsScore = 2;
+				} else {
+					commonExamsScore = 1.0 / examsInCommon;
+				}
 
-				// System.out.println("Exam " + examsReference.get(i).getName()
-				// + " with keyID: " + i +" has " + nrCommonStudents + "
-				// students in common with exam " + examsReference.get(key -
-				// season.ordinal() * splitSeasonCount).getName() + " wtih
-				// keyID: " + (key - season.ordinal() * splitSeasonCount));
-				// System.out.println("TimeSlot for exam with keyID " + i + " is
-				// " + examDate.toString() + " and the exam in common with keyID
-				// " + (key - season.ordinal() * splitSeasonCount) + " has
-				// timeslot " + commonExamDate.toString());
+				/// Exame A -> B C
+				// Exame B-> A
+				// [0,4,3,4,1]
+
+				scoreFirstParcel += minuteDifference * examsInCommon * nrCommonStudents * sameYearFactor;
+
 			}
 
 		}
-
 		// 2a parcela
 		ArrayList<TimeSlot> allocatedSorted = new ArrayList<TimeSlot>(allocatedSlots);
-
-		// System.out.println("These genes correspond to the times: ");
-		/*
-		 * for (int i = 0; i < allocatedSorted.size(); i++) {
-		 * System.out.println(allocatedSorted.get(i).toString()); }
-		 */
 
 		allocatedSorted.sort(null);
 
@@ -96,33 +94,27 @@ public class Chromosome implements Comparable<Chromosome> {
 
 		for (int i = 0; i < allocatedSorted.size() - 1; i++) {
 			long diff = allocatedSorted.get(i).diff(allocatedSorted.get(i + 1));
-			// System.out.println("Date " + i + " and " + (i+1) +" difference: "
-			// + diff);
+
 			scoreSecondParcel += diff;
 		}
 
 		score = scoreFirstParcel + scoreSecondParcel;
-		// System.out.println(score);
 
-		// System.out.println("First parcel: " + scoreFirstParcel);
-		// System.out.println("Second parcel: " + scoreSecondParcel);
-		// System.out.println("Total: " + totalScore);
 	}
 
 	public void registerTimeSlots(University university, Season season) {
-
 		this.university = university;
 		this.season = season;
 
 		allocatedSlots.clear();
 		ArrayList<TimeSlot> seasonTimeslots = university.getTimeSlots(season);
-		// System.out.println("Register function genes: " + genes);
-		// System.out.println("Register function slots: " + seasonTimeslots);
+
 		for (int i = 0; i < genes.size(); i++) {
 
 			TimeSlot ts = seasonTimeslots.get(genes.get(i));
 			allocatedSlots.add(ts);
 		}
+
 	}
 
 	public Chromosome() {
@@ -140,7 +132,7 @@ public class Chromosome implements Comparable<Chromosome> {
 		genes = givenGenes;
 	}
 
-	public Chromosome(ArrayList<Exam> examsReference, ArrayList<Integer> genes, long score, double probability) {
+	public Chromosome(ArrayList<Exam> examsReference, ArrayList<Integer> genes, long score, double probability, University university, Season season) {
 
 		this.genes = new ArrayList<Integer>();
 
@@ -149,6 +141,7 @@ public class Chromosome implements Comparable<Chromosome> {
 			this.genes.add(gene.intValue());
 		this.score = score;
 		this.probability = probability;
+		this.registerTimeSlots(university, season);
 	}
 
 	public void generate(int nrSlots) {
@@ -191,11 +184,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * @return generated Chromosome
 	 * @throws Exception
 	 */
-	// TODO should we use clone after all or it won't matter that the objects
-	// are the same?
-
-	public Chromosome[] crossOver(Chromosome chromosome, int crossOverPoints) throws Exception {
-		// System.out.println("Starting Cross Overs");
+	public Chromosome[] crossOver(Chromosome chromosome, double crossOverProb) throws Exception {
 		int size = chromosome.getGenes().size();
 
 		if (size != this.getGenes().size())
@@ -205,61 +194,22 @@ public class Chromosome implements Comparable<Chromosome> {
 		// for now we'll assume it's the same
 		Chromosome c1 = new Chromosome(examsReference);
 		Chromosome c2 = new Chromosome(examsReference);
-		ArrayList<Integer> chromossomeGenes = chromosome.getGenes();
+		ArrayList<Integer> chromosomeGenes = chromosome.getGenes();
 
-		c1.getGenes().addAll(genes);
-		c2.getGenes().addAll(chromossomeGenes);
+		for (Integer i : genes)
+			c1.getGenes().add(i);
+		for (Integer i : chromosomeGenes)
+			c2.getGenes().add(i);
 
-		int deltaPoint = Math.floorDiv(size, crossOverPoints);
-
-		// System.out.println("size " + size);
-		// System.out.println("crossOverPoints " + crossOverPoints);
-		// System.out.println("DeltaPoint " + (size % crossOverPoints));
-		// System.out.println("DeltaPoint " + deltaPoint);
-		//
-		// System.out.print("[ ");
-		// for (Integer i : chromossomeGenes) {
-		// System.out.print(i + " ");
-		// }
-		// System.out.println("] ");
-		// System.out.print("[ ");
-		// for (Integer i : genes) {
-		// System.out.print(i + " ");
-		// }
-		// System.out.println("] ");
-		boolean copy = false;
-		int oldPos = 0;
-
-		// 1 crossover Point in an array with 3 elements seria
-		// 0 - 1 para um deles (logo copia a pos 0) e iria i(0)+3 = 3
-		for (int i = 0; i < size; i += deltaPoint) {
-			if (!copy) {
-				copy = true;
-				if (GeneticAlgorithm.getRandomValues().nextInt() % 2 == 0) {
-					Main.replaceFrom(chromossomeGenes, c1.getGenes(), i + 1, i + deltaPoint);
-					Main.replaceFrom(genes, c2.getGenes(), i + 1, i + deltaPoint);
-				} else {
-					Main.replaceFrom(chromossomeGenes, c1.getGenes(), oldPos, i + 1);
-					Main.replaceFrom(genes, c2.getGenes(), oldPos, i + 1);
-				}
-			} else
-				copy = false;
-			oldPos = i;
-
+		Random n = new Random();
+		for (int index = 0; index < genes.size(); index++) {
+			if (n.nextDouble() < crossOverProb) {
+				// Troca
+				int i = c1.getGenes().get(index);
+				c1.getGenes().set(index, c2.getGenes().get(index));
+				c2.getGenes().set(index, i);
+			}
 		}
-		// System.out.print("[ ");
-		// for (Integer i : c1.getGenes()) {
-		// System.out.print(i + " ");
-		// }
-		// System.out.println("] ");
-		// System.out.print("[ ");
-		// for (Integer i : c2.getGenes()) {
-		// System.out.print(i + " ");
-		// }
-		// System.out.println("] ");
-		// System.out.println("END \n");
-		// System.out.println("Ending Cross Overs");
-
 		c1.registerTimeSlots(university, season);
 		c2.registerTimeSlots(university, season);
 
@@ -286,17 +236,30 @@ public class Chromosome implements Comparable<Chromosome> {
 	 * @return
 	 */
 	public Chromosome crossOver() {
-		return new Chromosome(examsReference, genes, score, probability);
+		return new Chromosome(examsReference, genes, score, probability, university, season);
 	}
 
 	public void mutate(Random seed, double mutationProb) {
 		int size = university.getTimeSlots(season).size();
-		int limit = size;
-		for (int index = 0; index < size; index++) {
+		boolean mutated = false;
+		for (int index = 0; index < genes.size(); index++) {
 			if (seed.nextDouble() <= mutationProb) {
-				genes.set(index, seed.nextInt(limit));
+				mutated = true;
+				int nextValue;
+				// More slots than exams available
+				if (size > genes.size()) {
+					// Only allows a slot that has yet to be picked
+					do {
+						nextValue = seed.nextInt(size);
+					} while (genes.contains(nextValue));
+				} else // if not any value will do
+					nextValue = seed.nextInt(size);
+
+				genes.set(index, nextValue);
 			}
 		}
+		if (mutated)
+			this.registerTimeSlots(university, season);
 	}
 
 	@Override
@@ -358,6 +321,7 @@ public class Chromosome implements Comparable<Chromosome> {
 	@Override
 	public String toString() {
 		return "Chromosome [season=" + season + " score: " + score + ", genes=" + genes + "]";
+
 	}
 
 	public void printTimeSlots() {
